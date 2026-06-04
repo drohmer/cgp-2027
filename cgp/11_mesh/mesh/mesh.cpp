@@ -50,8 +50,7 @@ namespace cgp
 		size_t const N = position.size();
 		if(normals.size()!=N)
 			normals.resize(N);
-		else
-			normals.fill(vec3{0,0,0});
+		normals.fill(vec3{0,0,0});
 
 		size_t const N_tri = connectivity.size();
 		for (size_t k_tri = 0; k_tri < N_tri; ++k_tri)

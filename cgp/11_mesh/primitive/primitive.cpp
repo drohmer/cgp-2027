@@ -204,10 +204,11 @@ namespace cgp
 					std::cos(phi)*std::sin(theta), 
 					std::sin(phi)};
 				vec3 const p = scale * n + center;
+				vec3 const n_ellipsoid = normalize(vec3{n.x/scale.x, n.y/scale.y, n.z/scale.z});
 				vec2 const uv = {u,v};
 
 				shape.position.push_back(p);
-				shape.normal.push_back(n);
+				shape.normal.push_back(n_ellipsoid);
 				shape.uv.push_back(uv);
 			}
 		}
