@@ -68,6 +68,8 @@ namespace cgp
 
         // Build the identity matrix
         static mat2 build_identity();
+        // Build a zero matrix
+        static mat2 build_zero();
 
         // Build a matrix filled with a single value
         static mat2 build_constant(float value);

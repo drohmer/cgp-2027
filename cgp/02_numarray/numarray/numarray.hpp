@@ -120,9 +120,11 @@ template <typename T> T sum(numarray<T> const& a);
 template <typename T> numarray<T>  operator-(numarray<T> const& a);
 
 template <typename T> numarray<T>& operator+=(numarray<T>& a, numarray<T> const& b);
+template <typename T> numarray<T>& operator+=(numarray<T>& a, T const& b);
 template <typename T> numarray<T>  operator+(numarray<T> const& a, numarray<T> const& b);
 
 template <typename T> numarray<T>& operator-=(numarray<T>& a, numarray<T> const& b);
+template <typename T> numarray<T>& operator-=(numarray<T>& a, T const& b);
 template <typename T> numarray<T>  operator-(numarray<T> const& a, numarray<T> const& b);
 
 template <typename T> numarray<T>& operator*=(numarray<T>& a, numarray<T> const& b);
@@ -471,6 +473,15 @@ numarray<T>& operator+=(numarray<T>& a, numarray<T> const& b)
 
 
 template <typename T>
+numarray<T>& operator+=(numarray<T>& a, T const& b)
+{
+    int const N = a.size();
+    for(int k=0; k<N; ++k)
+        a[k] += b;
+    return a;
+}
+
+template <typename T>
 numarray<T>  operator+(numarray<T> const& a, numarray<T> const& b)
 {
     numarray<T> res = a;
@@ -516,6 +527,15 @@ template <typename T> numarray<T>& operator-=(numarray<T>& a, numarray<T> const&
     const int N = a.size();
     for(int k=0; k<N; ++k)
         a[k] -= b[k];
+    return a;
+}
+
+template <typename T>
+numarray<T>& operator-=(numarray<T>& a, T const& b)
+{
+    int const N = a.size();
+    for(int k=0; k<N; ++k)
+        a[k] -= b;
     return a;
 }
 

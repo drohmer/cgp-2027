@@ -116,7 +116,8 @@ namespace cgp
 
 
     
-    mat2 mat2::build_identity() {return mat2(1, 0, 0, 1); }
+    mat2 mat2::build_identity() { return mat2(1, 0, 0, 1); }
+    mat2 mat2::build_zero()     { return mat2(0, 0, 0, 0); }
     mat2 mat2::build_constant(float value) { return mat2(value, value, value, value); }
 
     
