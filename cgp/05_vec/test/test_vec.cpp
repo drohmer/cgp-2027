@@ -49,5 +49,16 @@ namespace cgp_test
 			assert_cgp_no_msg(is_equal(w.x,1.0f) && is_equal(w.y,2.0f) && is_equal(w.z,3.0f) && is_equal(w.w,4.0f));
 			assert_cgp_no_msg(is_equal(w.xyz(), vec3{1,2,3}));
 		}
+
+		// scalar scaling keeps the scalar type (no longer frozen to float): a double-valued
+		//  numarray scaled by a double scalar must keep full double precision. 0.1 is not
+		//  representable in float, so float-freezing would change the result.
+		{
+			numarray_stack<double,2> const a{1.0, 1.0};
+			numarray_stack<double,2> const r = a * 0.1;     // 0.1 as a double scalar
+			assert_cgp_no_msg(r[0] == 0.1 && r[1] == 0.1);  // exact: would fail if scaled through float
+			// float case stays exactly as before
+			assert_cgp_no_msg(is_equal(vec3{1,2,3} * 2.0f, vec3{2,4,6}));
+		}
 	}
 }

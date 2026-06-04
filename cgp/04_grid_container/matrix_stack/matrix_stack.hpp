@@ -157,13 +157,13 @@ namespace cgp
 
 
     template <typename T, int N> matrix_stack<T, N, N>& operator*=(matrix_stack<T, N, N>& a, matrix_stack<T, N, N> const& b);
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2>& operator*=(matrix_stack<T, N1, N2>& a, float b);
+    template <typename T, int N1, int N2, typename S> matrix_stack<T, N1, N2>& operator*=(matrix_stack<T, N1, N2>& a, S b);
     template <typename T, int N1, int N2, int N3> matrix_stack<T, N1, N3>  operator*(matrix_stack<T, N1, N2> const& a, matrix_stack<T, N2, N3> const& b);
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2>  operator*(matrix_stack<T, N1, N2> const& a, float b);
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2>  operator*(float a, matrix_stack<T, N1, N2> const& b);
+    template <typename T, int N1, int N2, typename S> matrix_stack<T, N1, N2>  operator*(matrix_stack<T, N1, N2> const& a, S b);
+    template <typename T, int N1, int N2, typename S> matrix_stack<T, N1, N2>  operator*(S a, matrix_stack<T, N1, N2> const& b);
 
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2>& operator/=(matrix_stack<T, N1, N2>& a, float b);
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2>  operator/(matrix_stack<T, N1, N2> const& a, float b);
+    template <typename T, int N1, int N2, typename S> matrix_stack<T, N1, N2>& operator/=(matrix_stack<T, N1, N2>& a, S b);
+    template <typename T, int N1, int N2, typename S> matrix_stack<T, N1, N2>  operator/(matrix_stack<T, N1, N2> const& a, S b);
 
     // Unary negation
     template <typename T, int N1, int N2> matrix_stack<T, N1, N2> operator-(matrix_stack<T, N1, N2> const& m);
@@ -564,7 +564,7 @@ namespace cgp
         a = res;
         return a;
     }
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2>& operator*=(matrix_stack<T, N1, N2>& a, float b)
+    template <typename T, int N1, int N2, typename S> matrix_stack<T, N1, N2>& operator*=(matrix_stack<T, N1, N2>& a, S b)
     {
         a.data *= b;
         return a;
@@ -586,25 +586,25 @@ namespace cgp
         return res;
     }
 
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2> operator*(matrix_stack<T, N1, N2> const& a, float b)
+    template <typename T, int N1, int N2, typename S> matrix_stack<T, N1, N2> operator*(matrix_stack<T, N1, N2> const& a, S b)
     {
         matrix_stack<T, N1, N2> res;
         res.data = a.data * b;
         return res;
     }
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2> operator*(float a, matrix_stack<T, N1, N2> const& b)
+    template <typename T, int N1, int N2, typename S> matrix_stack<T, N1, N2> operator*(S a, matrix_stack<T, N1, N2> const& b)
     {
         matrix_stack<T, N1, N2> res;
         res.data = a * b.data;
         return res;
     }
 
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2>& operator/=(matrix_stack<T, N1, N2>& a, float b)
+    template <typename T, int N1, int N2, typename S> matrix_stack<T, N1, N2>& operator/=(matrix_stack<T, N1, N2>& a, S b)
     {
         a.data /= b;
         return a;
     }
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2>  operator/(matrix_stack<T, N1, N2> const& a, float b)
+    template <typename T, int N1, int N2, typename S> matrix_stack<T, N1, N2>  operator/(matrix_stack<T, N1, N2> const& a, S b)
     {
         matrix_stack<T, N1, N2> res;
         res.data = a.data / b;

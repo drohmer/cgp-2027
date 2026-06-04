@@ -96,29 +96,32 @@ namespace cgp
      * Common mathematical operations between buffers, and scalar or element values. */
     template <typename T, int N> numarray_stack<T, N>  operator-(numarray_stack<T, N> const& a);
 
+    // Note: addition/subtraction between a numarray_stack and a scalar (e.g. v + 2.0f) is
+    //  intentionally NOT provided. Adding a scalar to every component is an uncommon operation
+    //  and "v + 2.0f" is a frequent mistake (typically the user meant a component-wise vector
+    //  operation), so it is deliberately left as a compile error. Only scalar scaling
+    //  (multiplication and division by a scalar, below) is offered.
     template <typename T, int N> numarray_stack<T, N>& operator+=(numarray_stack<T, N>& a, numarray_stack<T, N> const& b);
-    //template <typename T, int N> numarray_stack<T, N>& operator+=(numarray_stack<T, N>& a, T const& b);
     template <typename T, int N> numarray_stack<T, N>  operator+(numarray_stack<T, N> const& a, numarray_stack<T, N> const& b);
-    //template <typename T, int N> numarray_stack<T, N>  operator+(numarray_stack<T, N> const& a, T const& b);
-    //template <typename T, int N> numarray_stack<T, N>  operator+(T const& a, numarray_stack<T, N> const& b);
 
     template <typename T, int N> numarray_stack<T, N>& operator-=(numarray_stack<T, N>& a, numarray_stack<T, N> const& b);
-    //template <typename T, int N> numarray_stack<T, N>& operator-=(numarray_stack<T, N>& a, T const& b);
     template <typename T, int N> numarray_stack<T, N>  operator-(numarray_stack<T, N> const& a, numarray_stack<T, N> const& b);
-    //template <typename T, int N> numarray_stack<T, N>  operator-(numarray_stack<T, N> const& a, T const& b);
-    //template <typename T, int N> numarray_stack<T, N>  operator-(T const& a, numarray_stack<T, N> const& b);
 
+    // Scalar scaling: the scalar type S is templated (instead of being fixed to float) so that
+    //  the scaling is done in the natural type at the call site (e.g. a double scalar keeps its
+    //  precision). For the common float case this is exactly equivalent to the previous behavior.
+    //  The dedicated component-wise overloads above are always preferred for vector*vector.
     template <typename T, int N> numarray_stack<T, N>& operator*=(numarray_stack<T, N>& a, numarray_stack<T, N> const& b);
-    template <typename T, int N> numarray_stack<T, N>& operator*=(numarray_stack<T, N>& a, float b);
+    template <typename T, int N, typename S> numarray_stack<T, N>& operator*=(numarray_stack<T, N>& a, S b);
     template <typename T, int N> numarray_stack<T, N>  operator*(numarray_stack<T, N> const& a, numarray_stack<T, N> const& b);
-    template <typename T, int N> numarray_stack<T, N>  operator*(numarray_stack<T, N> const& a, float b);
-    template <typename T, int N> numarray_stack<T, N>  operator*(float a, numarray_stack<T, N> const& b);
+    template <typename T, int N, typename S> numarray_stack<T, N>  operator*(numarray_stack<T, N> const& a, S b);
+    template <typename T, int N, typename S> numarray_stack<T, N>  operator*(S a, numarray_stack<T, N> const& b);
 
     template <typename T, int N> numarray_stack<T, N>& operator/=(numarray_stack<T, N>& a, numarray_stack<T, N> const& b);
-    template <typename T, int N> numarray_stack<T, N>& operator/=(numarray_stack<T, N>& a, float b);
+    template <typename T, int N, typename S> numarray_stack<T, N>& operator/=(numarray_stack<T, N>& a, S b);
     template <typename T, int N> numarray_stack<T, N>  operator/(numarray_stack<T, N> const& a, numarray_stack<T, N> const& b);
-    template <typename T, int N> numarray_stack<T, N>  operator/(numarray_stack<T, N> const& a, float b);
-    template <typename T, int N> numarray_stack<T, N>  operator/(float a, numarray_stack<T, N> const& b);
+    template <typename T, int N, typename S> numarray_stack<T, N>  operator/(numarray_stack<T, N> const& a, S b);
+    template <typename T, int N, typename S> numarray_stack<T, N>  operator/(S a, numarray_stack<T, N> const& b);
 
 
     // Return the unit vector.
@@ -327,12 +330,6 @@ namespace cgp
             a[k] += b[k];
         return a;
     }
-    //template <typename T, int N> numarray_stack<T, N>& operator+=(numarray_stack<T, N>& a, T const& b)
-    //{
-    //    for (int k = 0; k < N; ++k)
-    //        a[k] += b;
-    //    return a;
-    //}
     template <typename T, int N> numarray_stack<T, N>  operator+(numarray_stack<T, N> const& a, numarray_stack<T, N> const& b)
     {
         numarray_stack<T, N> res;
@@ -340,20 +337,6 @@ namespace cgp
             res[k] = a[k] + b[k];
         return res;
     }
-    //template <typename T, int N> numarray_stack<T, N>  operator+(numarray_stack<T, N> const& a, T const& b)
-    //{
-    //    numarray_stack<T, N> res;
-    //    for (int k = 0; k < N; ++k)
-    //        res[k] = a[k] + b;
-    //    return res;
-    //}
-    //template <typename T, int N> numarray_stack<T, N>  operator+(T const& a, numarray_stack<T, N> const& b)
-    //{
-    //    numarray_stack<T, N> res;
-    //    for (int k = 0; k < N; ++k)
-    //        res[k] = a + b[k];
-    //    return res;
-    //}
 
     template <typename T, int N> numarray_stack<T, N>& operator-=(numarray_stack<T, N>& a, numarray_stack<T, N> const& b)
     {
@@ -361,12 +344,6 @@ namespace cgp
             a[k] -= b[k];
         return a;
     }
-    //template <typename T, int N> numarray_stack<T, N>& operator-=(numarray_stack<T, N>& a, T const& b)
-    //{
-    //    for (int k = 0; k < N; ++k)
-    //        a[k] -= b;
-    //    return a;
-    //}
     template <typename T, int N> numarray_stack<T, N>  operator-(numarray_stack<T, N> const& a, numarray_stack<T, N> const& b)
     {
         numarray_stack<T, N> res;
@@ -374,20 +351,6 @@ namespace cgp
             res[k] = a[k] - b[k];
         return res;
     }
-    //template <typename T, int N> numarray_stack<T, N>  operator-(numarray_stack<T, N> const& a, T const& b)
-    //{
-    //    numarray_stack<T, N> res;
-    //    for (int k = 0; k < N; ++k)
-    //        res[k] = a[k] - b;
-    //    return res;
-    //}
-    //template <typename T, int N> numarray_stack<T, N>  operator-(T const& a, numarray_stack<T, N> const& b)
-    //{
-    //    numarray_stack<T, N> res;
-    //    for (int k = 0; k < N; ++k)
-    //        res[k] = a - b[k];
-    //    return res;
-    //}
 
     template <typename T, int N> numarray_stack<T, N>& operator*=(numarray_stack<T, N>& a, numarray_stack<T, N> const& b)
     {
@@ -395,7 +358,7 @@ namespace cgp
             a[k] *= b[k];
         return a;
     }
-    template <typename T, int N> numarray_stack<T, N>& operator*=(numarray_stack<T, N>& a, float b)
+    template <typename T, int N, typename S> numarray_stack<T, N>& operator*=(numarray_stack<T, N>& a, S b)
     {
         for (int k = 0; k < N; ++k)
             a[k] *= b;
@@ -408,14 +371,14 @@ namespace cgp
             res[k] = a[k] * b[k];
         return res;
     }
-    template <typename T, int N> numarray_stack<T, N>  operator*(numarray_stack<T, N> const& a, float b)
+    template <typename T, int N, typename S> numarray_stack<T, N>  operator*(numarray_stack<T, N> const& a, S b)
     {
         numarray_stack<T, N> res;
         for (int k = 0; k < N; ++k)
             res[k] = a[k] * b;
         return res;
     }
-    template <typename T, int N> numarray_stack<T, N>  operator*(float a, numarray_stack<T, N> const& b)
+    template <typename T, int N, typename S> numarray_stack<T, N>  operator*(S a, numarray_stack<T, N> const& b)
     {
         numarray_stack<T, N> res;
         for (int k = 0; k < N; ++k)
@@ -429,7 +392,7 @@ namespace cgp
             a[k] /= b[k];
         return a;
     }
-    template <typename T, int N> numarray_stack<T, N>& operator/=(numarray_stack<T, N>& a, float b)
+    template <typename T, int N, typename S> numarray_stack<T, N>& operator/=(numarray_stack<T, N>& a, S b)
     {
         for (int k = 0; k < N; ++k)
             a[k] /= b;
@@ -442,14 +405,14 @@ namespace cgp
             res[k] = a[k] / b[k];
         return res;
     }
-    template <typename T, int N> numarray_stack<T, N>  operator/(numarray_stack<T, N> const& a, float b)
+    template <typename T, int N, typename S> numarray_stack<T, N>  operator/(numarray_stack<T, N> const& a, S b)
     {
         numarray_stack<T, N> res;
         for (int k = 0; k < N; ++k)
             res[k] = a[k] / b;
         return res;
     }
-    template <typename T, int N> numarray_stack<T, N>  operator/(float a, numarray_stack<T, N> const& b)
+    template <typename T, int N, typename S> numarray_stack<T, N>  operator/(S a, numarray_stack<T, N> const& b)
     {
         numarray_stack<T, N> res;
         for (int k = 0; k < N; ++k)
