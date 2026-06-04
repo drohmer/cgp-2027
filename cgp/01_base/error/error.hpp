@@ -37,7 +37,7 @@ struct cgp_warning {
 #define error_cgp(MSG)  {cgp::call_error("",MSG,__FILE__,__func__,__LINE__); }
 
 // Default behavior of cgp error is to abort the program.
-//  The default behavior can be switched to throwing exception in defining cgp_ERROR_EXCEPTION
+//  The default behavior can be switched to throwing exception in defining CGP_ERROR_EXCEPTION
 // #define CGP_ERROR_EXCEPTION
 
 
