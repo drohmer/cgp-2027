@@ -58,7 +58,7 @@ namespace cgp
 		shape.connectivity = connectivity_grid(Nu,Nv);
 
 		if(is_closed){
-			shape.push_back( mesh_primitive_disc(radius, p0, dir, Nv).flip_connectivity() );
+			shape.push_back( mesh_primitive_disc(radius, p0, -dir, Nv) );
 			shape.push_back( mesh_primitive_disc(radius, p1, dir, Nv) );
 		}
 
@@ -364,7 +364,7 @@ namespace cgp
 
 
 		if(is_closed_base)
-			shape.push_back( mesh_primitive_disc(radius, center_of_base, axis_direction, Nu).flip_connectivity() );
+			shape.push_back( mesh_primitive_disc(radius, center_of_base, -axis_direction, Nu) );
 
 		shape.fill_empty_field();
 		return shape;
