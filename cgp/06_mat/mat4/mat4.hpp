@@ -235,25 +235,25 @@ namespace cgp
 
         /** Iterators
         *  Iterators compatible with STL syntax and std::array */
-        float* begin();
-        float* end();
-        float const* begin() const;
-        float const* end() const;
-        float const* cbegin() const;
-        float const* cend() const;
+        inline float* begin()              { return &data.at_unsafe(0).at_unsafe(0); }
+        inline float* end()                { return &data.at_unsafe(3).at_unsafe(3) + 1; }
+        inline float const* begin() const  { return &data.at_unsafe(0).at_unsafe(0); }
+        inline float const* end() const    { return &data.at_unsafe(3).at_unsafe(3) + 1; }
+        inline float const* cbegin() const { return &data.at_unsafe(0).at_unsafe(0); }
+        inline float const* cend() const   { return &data.at_unsafe(3).at_unsafe(3) + 1; }
 
 
         inline float const& at(int k1, int k2) const;
         inline float& at(int k1, int k2);
 
-        float const& at_unsafe(int k1, int k2) const;
-        float& at_unsafe(int k1, int k2);
+        inline float const& at_unsafe(int k1, int k2) const { return data.at_unsafe(k1).at_unsafe(k2); }
+        inline float& at_unsafe(int k1, int k2)             { return data.at_unsafe(k1).at_unsafe(k2); }
 
-        vec4 const& at_unsafe(int k1) const;
-        vec4& at_unsafe(int k1);
+        inline vec4 const& at_unsafe(int k1) const { return data.at_unsafe(k1); }
+        inline vec4& at_unsafe(int k1)             { return data.at_unsafe(k1); }
 
-        float const& at_offset_unsafe(int offset) const;
-        float& at_offset_unsafe(int offset);
+        inline float const& at_offset_unsafe(int offset) const { return begin()[offset]; }
+        inline float& at_offset_unsafe(int offset)             { return begin()[offset]; }
 
 
 
@@ -295,7 +295,7 @@ namespace cgp
             int const idx_1 = k1 + offset_1;
             for (int k2 = 0; k2 < N2_arg; ++k2) {
                 int const idx_2 = k2 + offset_2;
-                at(idx_1, idx_2) = block.at(k1, k2);
+                at_unsafe(idx_1, idx_2) = block.at_unsafe(k1, k2);
             }
         }
         return *this;

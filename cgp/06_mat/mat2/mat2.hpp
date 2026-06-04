@@ -197,7 +197,7 @@ namespace cgp
             if (k1 != idx1) {
                 int k2_res = 0;
                 for (int k2 = 0; k2 < 2; ++k2) {
-                    if (k2 != idx2) { res.at(k1_res, k2_res) = at(k1, k2); ++k2_res; }
+                    if (k2 != idx2) { res.at_unsafe(k1_res, k2_res) = at_unsafe(k1, k2); ++k2_res; }
                 }
                 ++k1_res;
             }
@@ -214,7 +214,7 @@ namespace cgp
         assert_cgp(N2_arg + offset_2 <= 2, "Block size exceed current matrix size");
         for (int k1 = 0; k1 < N1_arg; ++k1)
             for (int k2 = 0; k2 < N2_arg; ++k2)
-                at(k1 + offset_1, k2 + offset_2) = block.at(k1, k2);
+                at_unsafe(k1 + offset_1, k2 + offset_2) = block.at_unsafe(k1, k2);
         return *this;
     }
 
