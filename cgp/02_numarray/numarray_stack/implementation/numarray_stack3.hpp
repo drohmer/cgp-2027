@@ -110,13 +110,8 @@ namespace cgp
     void check_index_bounds(INDEX_TYPE index, numarray_stack<T, 3> const& data)
     {
 
-        if (index < 0 || index>2)
-        {
-            std::string msg = "\n";
-            msg += " - Try access " + type_str(data) + "[" + str(index) + "]\n";
-            msg += " - Indexing is limited to 0, 1, 2";
-            error_cgp(msg);
-        }
+        if (index < 0 || index > 2)
+            error_cgp(index_out_of_bounds_message((long long)index, 3, "index", type_str(data)));
     }
 #else
     template <typename T, int N, typename INDEX_TYPE>

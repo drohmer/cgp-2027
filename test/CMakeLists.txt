@@ -21,6 +21,7 @@ file(GLOB_RECURSE CGP_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/02_numarray/*.[ch]pp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/03_files/*.[ch]pp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/04_grid_container/*.[ch]pp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/05_vec/*.[ch]pp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/06_mat/*.[ch]pp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/08_random_noise/*.[ch]pp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/09_geometric_transformation/*.[ch]pp"

@@ -184,44 +184,8 @@ namespace cgp
     template <typename T, int N, typename INDEX_TYPE>
     void check_index_bounds(INDEX_TYPE index, numarray_stack<T, N> const& data)
     {
-
-
         if (index < 0 || index >= INDEX_TYPE(N))
-        {
-            std::string msg = "\n";
-            msg += " - Try access numarray_stack["+str(index)+"]\n";
-            msg += " - With container size ="+str(N)+"\n";
-            msg += " - Buffer type: " + type_str(data) + "\n";
-
-            if (index < 0)
-            {
-                msg += "\t> Buffer cannot be access with negative index.\n";
-                msg += "\t  Help: \n";
-                msg += "\t     Contrary to Python, negative indexing doesn't target the end of the buffer in C++. \n";
-            }
-            else if (N == 0)
-            {
-                msg += "\t> The container is empty: Its elements cannot be accessed.\n";
-            }
-            else if (index == INDEX_TYPE(N))
-            {
-                msg += "\t> Index reached the maximal size of the buffer \n";
-                msg += "\t> The maximal possible index should be " + str(N - 1) + " \n";
-                msg += "\t  Help: \n";
-                msg += "\t     C++ has index starting at 0. \n";
-                msg += "\t     Typical loops should go from index=0 to index<buffer.size(). \n";
-            }
-            else if (index >= INDEX_TYPE(N))
-            {
-                msg += "\t> Your index exceeded the size of the container\n";
-            }
-
-
-            msg += "\t  The function and variable that generated this error can be found in analysis the Call Stack.\n\n";
-
-            error_cgp(msg);
-        }
-
+            error_cgp(index_out_of_bounds_message((long long)index, (long long)N, "index", type_str(data)));
     }
 #else
     template <typename T, int N, typename INDEX_TYPE>

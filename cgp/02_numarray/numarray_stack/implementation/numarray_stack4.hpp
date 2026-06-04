@@ -116,13 +116,8 @@ namespace cgp
     void check_index_bounds(INDEX_TYPE index, numarray_stack<T, 4> const& data)
     {
 #ifndef CGP_NO_DEBUG
-        if (index < 0 || index>3)
-        {
-            std::string msg = "\n";
-            msg += " - Try access " + type_str(data) + "[" + str(index) + "]\n";
-            msg += " - Indexing is limited to 0, 1, 2, 3";
-            error_cgp(msg);
-        }
+        if (index < 0 || index > 3)
+            error_cgp(index_out_of_bounds_message((long long)index, 4, "index", type_str(data)));
 #endif
     }
 

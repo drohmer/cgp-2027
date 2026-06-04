@@ -201,41 +201,15 @@ template <typename T>
 static void check_index_bounds(int index1, int index2, int index3, grid_3D<T> const& data)
 {
 #ifndef CGP_NO_DEBUG
-    int const N1 = data.dimension.x;
-    int const N2 = data.dimension.y;
-    int const N3 = data.dimension.z;
-    assert_cgp_no_msg(N1>=0 && N2>=0 && N3>=0);
-    if (index1 < 0 || index2 < 0 || index3 < 0 || index1 >= N1 || index2 >= N2 || index3 >= N3)
-    {
-        std::string msg = "\n";
-
-        msg += "\t> Try to access grid_3D(" + str(index1) + "," + str(index2) + "," + str(index3) + ")\n";
-        msg += "\t>    - grid_3D has dimension = (" + str(N1) + "," + str(N2) + "," + str(N3) + ")\n";
-        msg += "\t>    - Type of grid_3D: " + type_str(data) + "\n";
-
-        if (index1 < 0 || index2 < 0 || index3 < 0)
-        {
-            msg += "\t> Buffer cannot be access with negative index.\n";
-        }
-        else if (N1 == 0 || N2 == 0 || N3 == 0)
-        {
-            msg += "\t> The buffer is empty, its elements cannot be accessed.\n";
-        }
-        else if (index1 == N1 || index2 == N2 || index3 == N3)
-        {
-            msg += "\t> Index reached the maximal size of the buffer \n";
-            msg += "\t> The maximal possible indexes should be (" + str(N1 - 1) + "," + str(N2 - 1) + "," + str(N3 - 1) + ") \n";
-        }
-        else if (index1 >= N1 || index2 >= N2 || index3 >= N3)
-        {
-            msg += "\t> Exceeded buffer dimension \n";
-        }
-
-
-        msg += "\n\t  The function and variable that generated this error can be found in analysis the Call Stack.\n";
-
-        error_cgp(msg);
-    }
+    int const N1 = int(data.dimension.x);
+    int const N2 = int(data.dimension.y);
+    int const N3 = int(data.dimension.z);
+    if (index1 < 0 || index1 >= N1)
+        error_cgp(index_out_of_bounds_message(index1, N1, "x", type_str(data)));
+    if (index2 < 0 || index2 >= N2)
+        error_cgp(index_out_of_bounds_message(index2, N2, "y", type_str(data)));
+    if (index3 < 0 || index3 >= N3)
+        error_cgp(index_out_of_bounds_message(index3, N3, "z", type_str(data)));
 #endif
 }
 

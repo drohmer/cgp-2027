@@ -247,54 +247,7 @@ void check_index_bounds(int index, numarray<T> const& data)
 
     int const N = data.size();
     if (index < 0 || index >= N)
-    {
-        std::string msg = "\n";
-
-        if (index < 0)
-        {
-            msg += "\t> Try to access numarray[" + str(index) + "]\n";
-            msg += "\t> Numarray cannot be access with negative index.\n";
-            msg += "\t  Extra information:\n";
-            msg += "\t    - Size of the numarray: " + str(data.size()) + "\n";
-            msg += "\t    - Index value: " + str(index) + "\n";
-            msg += "\t    - Numarray type: " + type_str(data) + "\n";
-            msg += "\t  Help: \n";
-            msg += "\t     Contrary to Python, negative indexing in C++ doesn't target the end of the numarray. \n";
-            msg += "\t     Numarrays of data cannot be accessed with negative index. \n";
-        }
-        else if (N == 0)
-        {
-            msg += "\t> Try to access numarray[" + str(index) + "]\n";
-            msg += "\t> But the numarray (" + type_str(data) + ") is empty. Its elements cannot be accessed.\n";
-            msg += "\t  Help: \n";
-            msg += "\t     You may have forgotten to intialize the size of this numarray: \n";
-            msg += "\t     - use numarray.resize(N) before its use \n";
-            msg += "\t     - or use numarray.push_back(element) to add new elements to it \n";
-        }
-        else if (index == N)
-        {
-            msg += "\t> Try to access numarray[" + str(index) + "] for a numarray of size=" + str(data.size()) + "\n";
-            msg += "\t> Index reached the maximal size of the numarray \n";
-            msg += "\t> The maximal possible index should be " + str(data.size() - 1) + " \n";
-            msg += "\t  Extra information:\n";
-            msg += "\t    - numarray type: " + type_str(data) + "\n";
-            msg += "\t  Help: \n";
-            msg += "\t     C++ has index starting at 0. \n";
-            msg += "\t     Typical loops should go from index=0 to index<numarray.size(). \n";
-        }
-        else if (index >= N)
-        {
-            msg += "\t> Try to access numarray[" + str(index) + "] for a size=" + str(data.size()) + "\n";
-            msg += "\t> numarray has a size=" + str(data.size()) + ": The index (" + str(index) + ") should be < " + str(data.size()) + "\n";
-            msg += "\t  Extra information:\n";
-            msg += "\t    - Numarray type: " + type_str(data) + "\n";
-        }
-
-
-        msg += "\t  The function and variable that generated this error can be found in analysis the Call Stack.\n";
-
-        error_cgp(msg);
-    }
+        error_cgp(index_out_of_bounds_message((long long)index, (long long)N, "index", type_str(data)));
 }
 #else
 template <typename T> void check_index_bounds(int , numarray<T> const& ) {}
