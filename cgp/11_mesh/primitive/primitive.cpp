@@ -26,6 +26,8 @@ namespace cgp
 		vec3 const p01 = p1-p0;
 		float const L = norm(p01);
 		assert_cgp(L>1e-6f, "Cylinder has 0 length");
+		assert_cgp(Nu>1, "Cylinder sample Nu (along axis) must be >1");
+		assert_cgp(Nv>2, "Cylinder sample Nv (around) must be >2");
 
 		vec3 const dir = p01/L;
 		rotation_transform const R = rotation_transform::from_vector_transform({0,0,1}, dir);
@@ -258,9 +260,9 @@ namespace cgp
 
 				vec3 const p = (1-u)*(1-v)*p00 + u*(1-v)*p10 + u*v*p11 + (1-u)*v*p01;
 
-				vec3 const dpdu = (1-u)*(-p00+p01)+u*(-p10+p11);
-				vec3 const dpdv = (1-v)*(-p00+p10)+v*( p11-p01);
-				vec3 const n = normalize(cross( dpdv, dpdu));
+				vec3 const dpdu = (1-v)*(-p00+p10)+v*( p11-p01);
+				vec3 const dpdv = (1-u)*(-p00+p01)+u*(-p10+p11);
+				vec3 const n = normalize(cross( dpdu, dpdv));
 				vec2 const uv = {u,v};
 
 				shape.position.push_back(p);

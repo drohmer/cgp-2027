@@ -92,5 +92,37 @@ namespace cgp_test
 				if (is_equal(cone.normal[k], vec3{ 0,0,-1 })) has_down = true;
 			assert_cgp_no_msg(has_down); // base outward (-z)
 		}
+
+		// ---------- negative uniform scale mirrors geometry (inverse-transpose: negate) ----------
+		// A triangle in z=0 with normal +z. scale(-1) is a point inversion (det<0): the stored
+		//  normal must flip to -z and the winding must be reversed to stay coherent.
+		{
+			mesh m;
+			m.position = { {0,0,0}, {1,0,0}, {0,1,0} };
+			m.normal = { {0,0,1}, {0,0,1}, {0,0,1} };
+			m.connectivity = { {0,1,2} };
+
+			m.scale(-1.0f);
+
+			for (int k = 0; k < m.normal.size(); ++k)
+				assert_cgp_no_msg(is_equal(m.normal[k], vec3{ 0,0,-1 }));
+			uint3 const& c = m.connectivity[0];
+			assert_cgp_no_msg(c[0] == 1u && c[1] == 0u && c[2] == 2u); // winding reversed
+		}
+
+		// ---------- single-axis negative scale is a reflection (normal stays +z) ----------
+		// Under diag(-1,1,1) the inverse-transpose keeps a +z normal as +z. The winding flip
+		//  + normal recomputation in scale(sx,sy,sz) must yield exactly that.
+		{
+			mesh m;
+			m.position = { {0,0,0}, {1,0,0}, {0,1,0} };
+			m.normal = { {0,0,1}, {0,0,1}, {0,0,1} };
+			m.connectivity = { {0,1,2} };
+
+			m.scale(-1.0f, 1.0f, 1.0f);
+
+			for (int k = 0; k < m.normal.size(); ++k)
+				assert_cgp_no_msg(is_equal(m.normal[k], vec3{ 0,0,1 }));
+		}
 	}
 }

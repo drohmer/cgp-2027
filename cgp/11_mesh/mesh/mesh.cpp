@@ -125,17 +125,17 @@ namespace cgp
 
 		if (m.normal.size()==0)
 		{std::cout<<warning+"Mesh doesn't have any per-vertex normal defined"<<std::endl; ok=false;}
-		if (m.normal.size()!=N)
+		else if (m.normal.size()!=N)
 		{std::cout<<warning+"Mesh has incoherent size of per-vertex normal"<<std::endl; ok=false;}
 
 		if(m.uv.size()==0)
 		{std::cout<<warning+"Mesh doesn't have any per-vertex uv defined"<<std::endl; ok=false;}
-		if(m.uv.size()!=N)
+		else if(m.uv.size()!=N)
 		{std::cout<<warning+"Mesh has incoherent size of per-vertex uv"<<std::endl; ok=false;}
 		
 		if(m.color.size()==0)
 		{std::cout<<warning+"Mesh doesn't have any per-vertex color defined"<<std::endl; ok=false;}
-		if(m.color.size()!=N)
+		else if(m.color.size()!=N)
 		{std::cout<<warning+"Mesh has incoherent size of per-vertex color"<<std::endl; ok=false;}
 
 		size_t const N_triangle = m.connectivity.size();
@@ -239,6 +239,13 @@ namespace cgp
 	{
 		for (vec3& p : position)
 			p *= s;
+		// A negative uniform factor mirrors the geometry: flip the stored normals and
+		//  the triangle winding so faces stay consistently oriented outward.
+		if (s < 0) {
+			for (vec3& n : normal)
+				n = -n;
+			flip_connectivity();
+		}
 		return *this;
 	}
 	mesh& mesh::scale(float sx,float sy, float sz)
@@ -248,6 +255,10 @@ namespace cgp
 			p.y *= sy;
 			p.z *= sz;
 		}
+		// A reflection (odd number of negative factors) reverses face orientation:
+		//  flip the winding so the recomputed normals point outward.
+		if (sx*sy*sz < 0)
+			flip_connectivity();
 		normal_update();
 		return *this;
 	}
