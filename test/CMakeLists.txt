@@ -1,0 +1,46 @@
+cmake_minimum_required(VERSION 3.16)
+project(cgp_test LANGUAGES CXX)
+
+# Pure-math CGP modules only (no OpenGL / GLFW dependency)
+file(GLOB_RECURSE CGP_SRC
+    "${CMAKE_CURRENT_LIST_DIR}/../cgp/01_base/*.[ch]pp"
+    "${CMAKE_CURRENT_LIST_DIR}/../cgp/02_numarray/*.[ch]pp"
+    "${CMAKE_CURRENT_LIST_DIR}/../cgp/03_files/*.[ch]pp"
+    "${CMAKE_CURRENT_LIST_DIR}/../cgp/04_grid_container/*.[ch]pp"
+    "${CMAKE_CURRENT_LIST_DIR}/../cgp/06_mat/*.[ch]pp"
+    "${CMAKE_CURRENT_LIST_DIR}/../cgp/08_random_noise/*.[ch]pp"
+    "${CMAKE_CURRENT_LIST_DIR}/../cgp/09_geometric_transformation/*.[ch]pp"
+    "${CMAKE_CURRENT_LIST_DIR}/../cgp/third_party/simplexnoise/*.[ch]pp"
+)
+
+add_executable(cgp_test
+    "${CMAKE_CURRENT_LIST_DIR}/main.cpp"
+    ${CGP_SRC}
+)
+
+target_include_directories(cgp_test PRIVATE
+    "${CMAKE_CURRENT_LIST_DIR}/.."
+    "${CMAKE_CURRENT_LIST_DIR}/../cgp"
+)
+
+target_compile_definitions(cgp_test PRIVATE
+    CGP_ERROR_EXCEPTION
+)
+
+set_target_properties(cgp_test PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF
+)
+
+if(MSVC)
+    target_compile_options(cgp_test PRIVATE /W4 /permissive-
+        /wd4127 /wd4267 /wd4244 /wd4996 /wd26451 /wd26495 /wd4305 /wd4458
+    )
+else()
+    target_compile_options(cgp_test PRIVATE
+        -Wall -Wextra -pedantic
+        -Wfatal-errors -Wno-pragmas -Wno-unknown-warning-option
+        -Wno-sign-compare -Wno-type-limits
+    )
+endif()

@@ -693,7 +693,7 @@ template <typename T> numarray<T> div(numarray<T> const& a, T const& b)
 
 template <typename T> numarray<T>  sub(T const& a, numarray<T> const& b)
 {
-    int N= a.size();
+    int N= b.size();
     numarray<T> res;
     res.resize(N);
 
@@ -705,7 +705,7 @@ template <typename T> numarray<T>  sub(T const& a, numarray<T> const& b)
 }
 template <typename T> numarray<T>  add(T const& a, numarray<T> const& b)
 {
-    int N= a.size();
+    int N= b.size();
     numarray<T> res;
     res.resize(N);
 
@@ -717,7 +717,7 @@ template <typename T> numarray<T>  add(T const& a, numarray<T> const& b)
 }
 template <typename T> numarray<T>  mul(T const& a, numarray<T> const& b)
 {
-    int N= a.size();
+    int N= b.size();
     numarray<T> res;
     res.resize(N);
 
@@ -729,7 +729,7 @@ template <typename T> numarray<T>  mul(T const& a, numarray<T> const& b)
 }
 template <typename T> numarray<T>  div(T const& a, numarray<T> const& b)
 {
-    int N= a.size();
+    int N= b.size();
     numarray<T> res;
     res.resize(N);
 

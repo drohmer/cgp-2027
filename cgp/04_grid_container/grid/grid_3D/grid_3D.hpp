@@ -420,7 +420,7 @@ template <typename T> grid_3D<T>  operator-(grid_3D<T> const& a, T const& b)
 template <typename T> grid_3D<T>  operator-(T const& a, grid_3D<T> const& b)
 {
     grid_3D<T> res(b.dimension);
-    res.data = a-b.data;
+    res.data = sub(a, b.data);
     return res;
 }
 

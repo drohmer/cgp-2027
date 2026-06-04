@@ -436,7 +436,7 @@ template <typename T> grid_2D<T>  operator-(grid_2D<T> const& a, T const& b)
 template <typename T> grid_2D<T>  operator-(T const& a, grid_2D<T> const& b)
 {
     grid_2D<T> res(b.dimension);
-    res.data = a-b.data;
+    res.data = sub(a, b.data);
     return res;
 }
 
