@@ -22,6 +22,7 @@ INCLUDE_MODULES = [
     "09_geometric_transformation",
     "10_camera_model",
     "11_mesh",
+    "12_shape",
 ]
 
 

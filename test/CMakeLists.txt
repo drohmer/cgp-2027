@@ -27,6 +27,7 @@ file(GLOB_RECURSE CGP_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/09_geometric_transformation/*.[ch]pp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/10_camera_model/*.[ch]pp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/11_mesh/*.[ch]pp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/12_shape/*.[ch]pp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/third_party/simplexnoise/*.[ch]pp"
 )
 

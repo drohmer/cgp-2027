@@ -4,10 +4,6 @@
 
 namespace cgp{
 
-	vec3 center;
-	vec3 length;
-	int3 samples;
-
 	spatial_domain_grid_3D::spatial_domain_grid_3D()
 		:center(), length(), samples()
 	{}

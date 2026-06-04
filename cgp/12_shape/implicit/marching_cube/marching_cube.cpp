@@ -3,6 +3,7 @@
 #include "cgp/09_geometric_transformation/interpolation/interpolation.hpp"
 #include "helper/marching_cubes_lut.hpp"
 #include <unordered_map>
+#include <algorithm>
 
 namespace cgp
 {
@@ -44,8 +45,12 @@ namespace cgp
 
 				int const idx = 3 * k_tri + k;
 
-				// The indices of the edge of the current vertex
-				std::pair<int, int> const edge = { relative[3 * k_tri+k].k0, relative[3 * k_tri+k].k1 };
+				// The indices of the edge of the current vertex.
+				// Canonicalize as (min,max): adjacent voxels visit a shared edge in opposite
+				//  order, so without this the same vertex would not be welded across voxels.
+				int const edge_k0 = relative[3 * k_tri+k].k0;
+				int const edge_k1 = relative[3 * k_tri+k].k1;
+				std::pair<int, int> const edge = { std::min(edge_k0, edge_k1), std::max(edge_k0, edge_k1) };
 
 				// Check if this edge has already been encountered
 				auto const it = unique_edge.find(edge);

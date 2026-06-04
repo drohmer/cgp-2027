@@ -65,7 +65,11 @@ namespace cgp
     {
         intersection_structure inter;
 
-        float const t = - dot(ray_origin-plane_position, plane_normal)/dot(ray_direction, plane_normal);
+        float const denom = dot(ray_direction, plane_normal);
+        if (std::abs(denom) < 1e-8f) // ray parallel to the plane: no intersection
+            return inter;
+
+        float const t = - dot(ray_origin-plane_position, plane_normal)/denom;
 
         if (t > 0)
         {
