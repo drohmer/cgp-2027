@@ -20,9 +20,9 @@ namespace cgp
 	// 1D offset corresponding to the index (k1,k2) in a 2D grid
 	int offset_grid(int2 const& k, int N1);
 
-	// 1D offset corresponding to the index (k1,k2,k3) in a 2D grid
+	// 1D offset corresponding to the index (k1,k2,k3) in a 3D grid
 	inline int offset_grid(int k1, int k2, int k3, int N1, int N2);
-	// 1D offset corresponding to the index (k1,k2,k3) in a 2D grid
+	// 1D offset corresponding to the index (k1,k2,k3) in a 3D grid
 	int offset_grid(int3 const& k, int N1, int N2);
 	
 	// Index (k1,k2) corresponding to a given offset in a 2D grid with static size

@@ -308,7 +308,7 @@ namespace cgp
     template <typename T, int N1, int N2>
     void check_index_bounds(int index1, int index2, matrix_stack<T, N1, N2> const& data)
     {
-#ifndef cgp_NO_DEBUG
+#ifndef CGP_NO_DEBUG
         if (index1 < 0 || index2 < 0 || index1 >= N1 || index2 >= N2)
         {
             std::string msg = "\n";
@@ -346,7 +346,7 @@ namespace cgp
     template <typename T, int N1, int N2>
     void check_index_bounds(int index2, matrix_stack<T, N1, N2> const& data)
     {
-#ifndef cgp_NO_DEBUG
+#ifndef CGP_NO_DEBUG
         if (index2 < 0 || index2 >= N2)
         {
             std::string msg = "\n";
@@ -385,14 +385,14 @@ namespace cgp
     template <typename T, int N1, int N2>
     void check_offset_bounds(int offset, matrix_stack<T, N1, N2> const& data)
     {
-#ifndef cgp_NO_DEBUG
+#ifndef CGP_NO_DEBUG
         if (offset < 0 || offset >= N1*N2 )
         {
             std::string msg = "\n";
 
             msg += "\t> Try to access matrix_stack.at_offset(" + str(offset) + ")\n";
             msg += "\t>    - matrix_stack has dimension = (" + str(N1) + "," + str(N2) + ")\n";
-            msg += "\t>    - the maximal offset is = (" + str(N1*N2) + ")\n";
+            msg += "\t>    - the maximal offset is = (" + str(N1*N2 - 1) + ")\n";
             msg += "\t>    - Type of matrix_stack: " + type_str(data) + "\n";
 
             if (offset < 0)

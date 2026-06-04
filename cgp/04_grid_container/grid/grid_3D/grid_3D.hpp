@@ -14,7 +14,7 @@ namespace cgp
 
 /** Container for 3D-grid like structure storing numerical element
 *
-* The grid_3D structure provide convenient access for 3D-grid organization where an element can be queried as grid_3D(i,j).
+* The grid_3D structure provide convenient access for 3D-grid organization where an element can be queried as grid_3D(i,j,k).
 * Elements of grid_3D are stored contiguously in heap memory and remain fully compatible with std::vector and pointers.
 **/
 template <typename T>
@@ -26,7 +26,7 @@ struct grid_3D
     numarray<T> data;
 
     /** Constructors */
-    grid_3D();                 // Emtpy grid
+    grid_3D();                 // Empty grid
     grid_3D(int size);         // Generate a grid of dimension size x size x size
     grid_3D(int3 const& size); // Generate a grid of dimension size.x size.y size.z
     grid_3D(int size_1, int size_2, int size_3); // Generate a grid of dimension size_1 x size_2 x size_3
@@ -35,7 +35,7 @@ struct grid_3D
     * \note: the size of the 3D-buffer must satisfy arg.size = size_1 * size_2 * size_3 */
     static grid_3D<T> from_array(numarray<T> const& arg, int size_1, int size_2, int size_3);
 
-    /** Remove all elements from the grid_2D */
+    /** Remove all elements from the grid_3D */
     void clear();
     /** Total number of elements size = dimension[0] * dimension[1] * dimension[2] */
     int size() const;
@@ -182,7 +182,7 @@ void grid_3D<T>::fill(T const& value)
 template <typename T>
 grid_3D<T> grid_3D<T>::from_array(numarray<T> const& arg, int size_1, int size_2, int size_3)
 {
-    assert_cgp(arg.size()==size_1*size_2*size_3, "Incoherent size to generate grid_2D");
+    assert_cgp(arg.size()==size_1*size_2*size_3, "Incoherent size to generate grid_3D");
 
     grid_3D<T> b(size_1, size_2, size_3);
     b.data = arg;
@@ -200,7 +200,7 @@ void grid_3D<T>::clear()
 template <typename T>
 static void check_index_bounds(int index1, int index2, int index3, grid_3D<T> const& data)
 {
-#ifndef cgp_NO_DEBUG
+#ifndef CGP_NO_DEBUG
     int const N1 = data.dimension.x;
     int const N2 = data.dimension.y;
     int const N3 = data.dimension.z;

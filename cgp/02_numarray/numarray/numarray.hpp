@@ -238,7 +238,7 @@ template <typename T> std::string type_str(numarray<T> const&)
 }
 
 
-#ifndef cgp_NO_DEBUG
+#ifndef CGP_NO_DEBUG
 template <typename T>
 void check_index_bounds(int index, numarray<T> const& data)
 {

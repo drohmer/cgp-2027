@@ -165,7 +165,7 @@ grid_stack_2D<T, N1, N2>& grid_stack_2D<T,N1,N2>::fill(T const& value)
 template <typename T, int N1, int N2>
 void check_index_bounds(int index1, int index2, grid_stack_2D<T,N1,N2> const& data)
 {
-#ifndef cgp_NO_DEBUG
+#ifndef CGP_NO_DEBUG
     if (index1 < 0 || index2<0 || index1>=N1 || index2>=N2)
     {
         std::string msg = "\n";

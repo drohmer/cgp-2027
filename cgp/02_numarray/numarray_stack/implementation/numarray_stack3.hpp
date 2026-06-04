@@ -105,7 +105,7 @@ namespace cgp
         return *this;
     }
 
-#ifndef cgp_NO_DEBUG
+#ifndef CGP_NO_DEBUG
     template <typename T, int N, typename INDEX_TYPE>
     void check_index_bounds(INDEX_TYPE index, numarray_stack<T, 3> const& data)
     {

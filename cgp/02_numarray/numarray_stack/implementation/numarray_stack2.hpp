@@ -102,7 +102,7 @@ namespace cgp
     template <typename T, int N, typename INDEX_TYPE>
     void check_index_bounds(INDEX_TYPE index, numarray_stack<T, 2> const& data)
     {
-#ifndef cgp_NO_DEBUG
+#ifndef CGP_NO_DEBUG
         if (index < 0 || index>1)
         {
             std::string msg = "\n";
