@@ -78,8 +78,8 @@ struct numarray
 
     /** Direct access to the value - doesn't check index bounds*/
     // Depreciated function - use at() instead
-    T const& at_unsafe(int index) const;
-    T& at_unsafe(int index);
+    T const& coeff(int index) const;
+    T& coeff(int index);
 };
 
 template <typename T> std::string type_str(numarray<T> const&);
@@ -286,13 +286,13 @@ T& numarray<T>::operator()(int index)
 
 
 template <typename T>
-T const& numarray<T>::at_unsafe(int index) const
+T const& numarray<T>::coeff(int index) const
 {
     return data[index];
 }
 
 template <typename T>
-T& numarray<T>::at_unsafe(int index)
+T& numarray<T>::coeff(int index)
 {
     return data[index];
 }

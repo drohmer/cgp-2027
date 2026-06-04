@@ -235,22 +235,22 @@ namespace cgp
 
         /** Iterators
         *  Iterators compatible with STL syntax and std::array */
-        inline float* begin()              { return &data.at_unsafe(0).at_unsafe(0); }
-        inline float* end()                { return &data.at_unsafe(3).at_unsafe(3) + 1; }
-        inline float const* begin() const  { return &data.at_unsafe(0).at_unsafe(0); }
-        inline float const* end() const    { return &data.at_unsafe(3).at_unsafe(3) + 1; }
-        inline float const* cbegin() const { return &data.at_unsafe(0).at_unsafe(0); }
-        inline float const* cend() const   { return &data.at_unsafe(3).at_unsafe(3) + 1; }
+        inline float* begin()              { return &data.coeff(0).coeff(0); }
+        inline float* end()                { return &data.coeff(3).coeff(3) + 1; }
+        inline float const* begin() const  { return &data.coeff(0).coeff(0); }
+        inline float const* end() const    { return &data.coeff(3).coeff(3) + 1; }
+        inline float const* cbegin() const { return &data.coeff(0).coeff(0); }
+        inline float const* cend() const   { return &data.coeff(3).coeff(3) + 1; }
 
 
         inline float const& at(int k1, int k2) const;
         inline float& at(int k1, int k2);
 
-        inline float const& at_unsafe(int k1, int k2) const { return data.at_unsafe(k1).at_unsafe(k2); }
-        inline float& at_unsafe(int k1, int k2)             { return data.at_unsafe(k1).at_unsafe(k2); }
+        inline float const& coeff(int k1, int k2) const { return data.coeff(k1).coeff(k2); }
+        inline float& coeff(int k1, int k2)             { return data.coeff(k1).coeff(k2); }
 
-        inline vec4 const& at_unsafe(int k1) const { return data.at_unsafe(k1); }
-        inline vec4& at_unsafe(int k1)             { return data.at_unsafe(k1); }
+        inline vec4 const& coeff(int k1) const { return data.coeff(k1); }
+        inline vec4& coeff(int k1)             { return data.coeff(k1); }
 
         inline float const& at_offset_unsafe(int offset) const { return begin()[offset]; }
         inline float& at_offset_unsafe(int offset)             { return begin()[offset]; }
@@ -280,7 +280,7 @@ namespace cgp
         int const N2m = std::min(int(4), N2_arg);
         for (int k1 = 0; k1 < N1m; ++k1)
             for (int k2 = 0; k2 < N2m; ++k2)
-                at(k1, k2) = M.at(k1, k2);
+                coeff(k1, k2) = M.coeff(k1, k2);
     }
 
     template <int N1_arg, int N2_arg>
@@ -295,7 +295,7 @@ namespace cgp
             int const idx_1 = k1 + offset_1;
             for (int k2 = 0; k2 < N2_arg; ++k2) {
                 int const idx_2 = k2 + offset_2;
-                at_unsafe(idx_1, idx_2) = block.at_unsafe(k1, k2);
+                coeff(idx_1, idx_2) = block.coeff(k1, k2);
             }
         }
         return *this;
@@ -304,11 +304,13 @@ namespace cgp
 
     float const& matrix_stack<float, 4, 4>::at(int k1, int k2) const
     {
-        return *(begin() + k2 + 4 * k1);
+        check_index_bounds(k1, k2, *this);
+        return coeff(k1, k2);
     }
     float& matrix_stack<float, 4, 4>::at(int k1, int k2)
     {
-        return *(begin() + k2 + 4 * k1);
+        check_index_bounds(k1, k2, *this);
+        return coeff(k1, k2);
     }
 
 

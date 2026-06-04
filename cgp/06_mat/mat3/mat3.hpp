@@ -119,11 +119,11 @@ namespace cgp
         inline float const& at(int k1, int k2) const;
         inline float& at(int k1, int k2);
 
-        inline float const& at_unsafe(int k1, int k2) const { return at(k1, k2); }
-        inline float& at_unsafe(int k1, int k2)             { return at(k1, k2); }
+        inline float const& coeff(int k1, int k2) const { return data.coeff(k1).coeff(k2); }
+        inline float& coeff(int k1, int k2)             { return data.coeff(k1).coeff(k2); }
 
-        inline vec3 const& at_unsafe(int k1) const { return data.at_unsafe(k1); }
-        inline vec3& at_unsafe(int k1)             { return data.at_unsafe(k1); }
+        inline vec3 const& coeff(int k1) const { return data.coeff(k1); }
+        inline vec3& coeff(int k1)             { return data.coeff(k1); }
 
         inline float const& at_offset(int offset) const;
         inline float& at_offset(int offset);
@@ -166,16 +166,18 @@ namespace cgp
         int const N2m = std::min(3, N2_arg);
         for (int k1 = 0; k1 < N1m; ++k1)
             for (int k2 = 0; k2 < N2m; ++k2)
-                at(k1, k2) = M.at(k1, k2);
+                coeff(k1, k2) = M.coeff(k1, k2);
     }
 
     float const& mat3::at(int k1, int k2) const
     {
-        return *(begin() + k2 + 3 * k1);
+        check_index_bounds(k1, k2, *this);
+        return coeff(k1, k2);
     }
     float& mat3::at(int k1, int k2)
     {
-        return *(begin() + k2 + 3 * k1);
+        check_index_bounds(k1, k2, *this);
+        return coeff(k1, k2);
     }
 
     vec3 const& mat3::at(int k2) const
@@ -205,7 +207,7 @@ namespace cgp
             if (k1 != idx1) {
                 int k2_res = 0;
                 for (int k2 = 0; k2 < 3; ++k2) {
-                    if (k2 != idx2) { res.at_unsafe(k1_res, k2_res) = at_unsafe(k1, k2); ++k2_res; }
+                    if (k2 != idx2) { res.coeff(k1_res, k2_res) = coeff(k1, k2); ++k2_res; }
                 }
                 ++k1_res;
             }
@@ -222,7 +224,7 @@ namespace cgp
         assert_cgp(N2_arg + offset_2 <= 3, "Block size exceed current matrix size");
         for (int k1 = 0; k1 < N1_arg; ++k1)
             for (int k2 = 0; k2 < N2_arg; ++k2)
-                at_unsafe(k1 + offset_1, k2 + offset_2) = block.at_unsafe(k1, k2);
+                coeff(k1 + offset_1, k2 + offset_2) = block.coeff(k1, k2);
         return *this;
     }
 

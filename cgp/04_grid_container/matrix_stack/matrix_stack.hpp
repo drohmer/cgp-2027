@@ -99,11 +99,11 @@ namespace cgp
         inline T const& at(int k1, int k2) const;
         inline T& at(int k1, int k2);
 
-        T const& at_unsafe(int k1, int k2) const;
-        T& at_unsafe(int k1, int k2);
+        T const& coeff(int k1, int k2) const;
+        T& coeff(int k1, int k2);
 
-        numarray_stack<T, N2> const& at_unsafe(int k1) const;
-        numarray_stack<T, N2>& at_unsafe(int k1);
+        numarray_stack<T, N2> const& coeff(int k1) const;
+        numarray_stack<T, N2>& coeff(int k1);
 
         T const& at_offset_unsafe(int offset) const;
         T& at_offset_unsafe(int offset);
@@ -210,19 +210,19 @@ namespace cgp
     }
 
 
-    template <typename T, int N1, int N2> T* matrix_stack<T, N1, N2>::begin() { return &at_unsafe(0, 0); }
-    template <typename T, int N1, int N2> T* matrix_stack<T, N1, N2>::end() { return &at_unsafe(N1-1, N2-1)+1; }
-    template <typename T, int N1, int N2> T const* matrix_stack<T, N1, N2>::begin() const { return &at_unsafe(0, 0); }
-    template <typename T, int N1, int N2> T const* matrix_stack<T, N1, N2>::end() const { return &at_unsafe(N1 - 1, N2 - 1) + 1; }
-    template <typename T, int N1, int N2> T const* matrix_stack<T, N1, N2>::cbegin() const { return &at_unsafe(0, 0); }
-    template <typename T, int N1, int N2> T const* matrix_stack<T, N1, N2>::cend() const { return &at_unsafe(N1 - 1, N2 - 1) + 1; }
+    template <typename T, int N1, int N2> T* matrix_stack<T, N1, N2>::begin() { return &coeff(0, 0); }
+    template <typename T, int N1, int N2> T* matrix_stack<T, N1, N2>::end() { return &coeff(N1-1, N2-1)+1; }
+    template <typename T, int N1, int N2> T const* matrix_stack<T, N1, N2>::begin() const { return &coeff(0, 0); }
+    template <typename T, int N1, int N2> T const* matrix_stack<T, N1, N2>::end() const { return &coeff(N1 - 1, N2 - 1) + 1; }
+    template <typename T, int N1, int N2> T const* matrix_stack<T, N1, N2>::cbegin() const { return &coeff(0, 0); }
+    template <typename T, int N1, int N2> T const* matrix_stack<T, N1, N2>::cend() const { return &coeff(N1 - 1, N2 - 1) + 1; }
 
-    template <typename T, int N1, int N2> T const& matrix_stack<T, N1, N2>::at_unsafe(int k1, int k2) const { return data.at_unsafe(k1).at_unsafe(k2); }
-    template <typename T, int N1, int N2> T& matrix_stack<T, N1, N2>::at_unsafe(int k1, int k2) { return data.at_unsafe(k1).at_unsafe(k2); }
+    template <typename T, int N1, int N2> T const& matrix_stack<T, N1, N2>::coeff(int k1, int k2) const { return data.coeff(k1).coeff(k2); }
+    template <typename T, int N1, int N2> T& matrix_stack<T, N1, N2>::coeff(int k1, int k2) { return data.coeff(k1).coeff(k2); }
 
 
-    template <typename T, int N1, int N2> numarray_stack<T, N2> const& matrix_stack<T, N1, N2>::at_unsafe(int k1) const { return data.at_unsafe(k1); }
-    template <typename T, int N1, int N2> numarray_stack<T, N2>& matrix_stack<T, N1, N2>::at_unsafe(int k1) { return data.at_unsafe(k1); }
+    template <typename T, int N1, int N2> numarray_stack<T, N2> const& matrix_stack<T, N1, N2>::coeff(int k1) const { return data.coeff(k1); }
+    template <typename T, int N1, int N2> numarray_stack<T, N2>& matrix_stack<T, N1, N2>::coeff(int k1) { return data.coeff(k1); }
 
     template <typename T, int N1, int N2> T const& matrix_stack<T, N1, N2>::at_offset_unsafe(int offset) const { return begin()[offset];}
     template <typename T, int N1, int N2> T& matrix_stack<T, N1, N2>::at_offset_unsafe(int offset) { return begin()[offset]; }
@@ -246,7 +246,7 @@ namespace cgp
         int counter = 0;
         for (int k1 = 0; k1 < N1; ++k1)
             for (int k2 = 0; k2 < N2; ++k2) {
-                at_unsafe(k1, k2) = elements.at_unsafe(counter);
+                coeff(k1, k2) = elements.coeff(counter);
                 counter++;
             }
     }
@@ -260,7 +260,7 @@ namespace cgp
 
         for (int k1 = 0; k1 < N1; ++k1) {
             for (int k2 = 0; k2 < N2; ++k2) {
-                at_unsafe(k1, k2) = *it_arg;
+                coeff(k1, k2) = *it_arg;
                 ++it_arg;
             }
         }
@@ -274,7 +274,7 @@ namespace cgp
         assert_cgp(arg.size() >= N1, "Insufficient size to initialize matrix_stack");
         auto it_arg = arg.begin();
         for (int k1 = 0; k1 < N1; ++k1) {
-            data.at_unsafe(k1) = *it_arg;
+            data.coeff(k1) = *it_arg;
             ++it_arg;
         }
     }
@@ -288,7 +288,7 @@ namespace cgp
         int const N2m = std::min(N2, N2_arg);
         for (int k1 = 0; k1 < N1m; ++k1)
             for (int k2 = 0; k2 < N2m; ++k2)
-                at_unsafe(k1, k2) = M.at_unsafe(k1, k2);
+                coeff(k1, k2) = M.coeff(k1, k2);
     }
 
 
@@ -340,35 +340,35 @@ namespace cgp
     template <typename T, int N1, int N2>
     numarray_stack<T, N2> const& matrix_stack<T, N1, N2>::operator[](int k1) const {
         check_index_bounds(k1, *this);
-        return at_unsafe(k1);
+        return coeff(k1);
     }
     template <typename T, int N1, int N2>
     numarray_stack<T, N2>& matrix_stack<T, N1, N2>::operator[](int k1) {
         check_index_bounds(k1, *this);
-        return at_unsafe(k1);
+        return coeff(k1);
     }
 
     template <typename T, int N1, int N2>
     numarray_stack<T, N2> const& matrix_stack<T, N1, N2>::operator()(int k1) const {
         check_index_bounds(k1, *this);
-        return at_unsafe(k1);
+        return coeff(k1);
     }
     template <typename T, int N1, int N2>
     numarray_stack<T, N2>& matrix_stack<T, N1, N2>::operator()(int k1) {
         check_index_bounds(k1, *this);
-        return at_unsafe(k1);
+        return coeff(k1);
     }
 
 
     template <typename T, int N1, int N2>
     T const& matrix_stack<T, N1, N2>::operator()(int k1, int k2) const {
         check_index_bounds(k1, k2, *this);
-        return at_unsafe(k1,k2);
+        return coeff(k1,k2);
     }
     template <typename T, int N1, int N2>
     T& matrix_stack<T, N1, N2>::operator()(int k1, int k2) {
         check_index_bounds(k1, k2, *this);
-        return at_unsafe(k1, k2);
+        return coeff(k1, k2);
     }
 
 
@@ -397,7 +397,7 @@ namespace cgp
             int const idx_1 = k1 + offset_1;
             for (int k2 = 0; k2 < N2_arg; ++k2) {
                 int const idx_2 = k2 + offset_2;
-                at_unsafe(idx_1, idx_2) = block.at_unsafe(k1, k2);
+                coeff(idx_1, idx_2) = block.coeff(k1, k2);
             }
         }
         return *this;
@@ -481,7 +481,7 @@ namespace cgp
         for (int k1 = 0; k1 < N1; ++k1) {
             s += begin_line;
             for (int k2 = 0; k2 < N2; ++k2) {
-                s += str(v.at_unsafe(k1, k2));
+                s += str(v.coeff(k1, k2));
                 if ( k2 != N2 - 1)
                     s += separator;
             }
@@ -629,10 +629,10 @@ namespace cgp
     {
         numarray_stack<T, N1> res = {};
         for (int k1 = 0; k1 < N1; ++k1) {
-            auto& current = res.at_unsafe(k1);
+            auto& current = res.coeff(k1);
             for (int k2 = 0; k2 < N2; ++k2)
                 current += a.at(k1,k2) * b.at(k2);
-            res.at_unsafe(k1) = current;
+            res.coeff(k1) = current;
         }
         return res;
     }
@@ -659,7 +659,7 @@ namespace cgp
                 int k2_res = 0;
                 for (int k2 = 0; k2 < N2; ++k2) {
                     if (k2 != idx2){
-                        res.at_unsafe(k1_res, k2_res) = at_unsafe(k1, k2);
+                        res.coeff(k1_res, k2_res) = coeff(k1, k2);
                         ++k2_res;
                     }
                 }
@@ -676,7 +676,7 @@ namespace cgp
         int const N = std::min(N1, N2);
         matrix_stack<T, N1, N2> id = {};
         for (int k = 0; k < N; ++k)
-            id.at_unsafe(k, k) = cgp_trait<T>::one();
+            id.coeff(k, k) = cgp_trait<T>::one();
         return id;
     }
 
@@ -686,7 +686,7 @@ namespace cgp
         int const N = std::min(N1, N2);
         matrix_stack<T, N1, N2> m = {};
         for (int k = 0; k < N; ++k)
-            m.at_unsafe(k, k) = arg[k];
+            m.coeff(k, k) = arg[k];
         return m;
     }
 
@@ -698,7 +698,7 @@ namespace cgp
         T s{};
         for(int k1=0; k1<N1; ++k1)
             for(int k2=0; k2<N2; ++k2)
-                s += m.at_unsafe(k1,k2) * m.at_unsafe(k1,k2);
+                s += m.coeff(k1,k2) * m.coeff(k1,k2);
 
         return sqrt(s);
     }

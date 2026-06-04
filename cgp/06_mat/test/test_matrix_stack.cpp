@@ -340,7 +340,7 @@ namespace cgp_test
 			// {1,1,1,1}: sqrt(1+1+1+1) = 2
 			cgp::mat2 M2 = {1.0f,1.0f, 1.0f,1.0f};
 			assert_cgp_no_msg(cgp::is_equal(cgp::norm(M2), 2.0f));
-			// norm on mat3 (used at_unsafe on specialization — now uses at)
+			// norm on mat3 (used coeff on specialization — now uses at)
 			cgp::mat3 M3 = {1.0f,0.0f,0.0f, 0.0f,1.0f,0.0f, 0.0f,0.0f,1.0f};
 			assert_cgp_no_msg(cgp::is_equal(cgp::norm(M3), std::sqrt(3.0f)));
 		}
@@ -394,9 +394,40 @@ namespace cgp_test
 			assert_cgp_no_msg(is_equal(mat2().set_block(matrix_stack<float,1,1>{5}, 1, 1),
 				mat2{ 0,0, 0,5 }));
 
-			// at_unsafe(row) and at_offset_unsafe
-			assert_cgp_no_msg(is_equal(B.at_unsafe(1), vec2{ 3,4 }));
+			// coeff(row) and at_offset_unsafe
+			assert_cgp_no_msg(is_equal(B.coeff(1), vec2{ 3,4 }));
 			assert_cgp_no_msg(is_equal(B.at_offset_unsafe(2), 3.0f));
+		}
+
+		// at(k1,k2) is now checked on mat specializations (same convention as the generic)
+		// coeff(k1,k2) is unchecked (direct access)
+		{
+			using namespace cgp;
+			mat3 const M = mat3::build_identity();
+
+			// valid at() access
+			assert_cgp_no_msg(is_equal(M.at(0,0), 1.0f));
+			assert_cgp_no_msg(is_equal(M.at(2,2), 1.0f));
+			assert_cgp_no_msg(is_equal(M.at(0,1), 0.0f));
+
+			// coeff gives the same value (unchecked path)
+			assert_cgp_no_msg(is_equal(M.coeff(1,1), 1.0f));
+
+			// at(k1,k2) out-of-bounds throws (CGP_ERROR_EXCEPTION defined in test build)
+			auto throws_mat3 = [&]{ volatile float x = M.at(3,0); (void)x; };
+			bool caught3 = false;
+			try { throws_mat3(); } catch (...) { caught3 = true; }
+			assert_cgp_no_msg(caught3);
+
+			mat2 const M2 = mat2::build_identity();
+			bool caught2 = false;
+			try { volatile float x = M2.at(0,2); (void)x; } catch (...) { caught2 = true; }
+			assert_cgp_no_msg(caught2);
+
+			mat4 const M4 = mat4::build_identity();
+			bool caught4 = false;
+			try { volatile float x = M4.at(4,0); (void)x; } catch (...) { caught4 = true; }
+			assert_cgp_no_msg(caught4);
 		}
 	}
 
@@ -426,8 +457,8 @@ namespace cgp_test
 		(void)c[0];                (void)m[0];
 		(void)c(0);               (void)m(0);
 		(void)c.at(0,0);          (void)m.at(0,0);
-		(void)c.at_unsafe(0,0);   (void)m.at_unsafe(0,0);
-		(void)c.at_unsafe(0);     (void)m.at_unsafe(0);    // row accessor that had been forgotten on mat2/mat3
+		(void)c.coeff(0,0);   (void)m.coeff(0,0);
+		(void)c.coeff(0);     (void)m.coeff(0);    // row accessor that had been forgotten on mat2/mat3
 		(void)c.at_offset(0);     (void)m.at_offset(0);
 		(void)c.at_offset_unsafe(0); (void)m.at_offset_unsafe(0);
 

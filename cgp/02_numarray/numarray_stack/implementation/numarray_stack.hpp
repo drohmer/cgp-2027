@@ -60,8 +60,8 @@ namespace cgp
         typename std::array<T, N>::const_iterator cbegin() const;
         typename std::array<T, N>::const_iterator cend() const;
 
-        T const& at_unsafe(int index) const    { return data[index]; }
-        T & at_unsafe(int index)               { return data[index]; }
+        T const& coeff(int index) const    { return data[index]; }
+        T & coeff(int index)               { return data[index]; }
     };
 
 
@@ -472,7 +472,7 @@ namespace cgp
 
         T current_max = get<0>(v);
         for (int k = 1; k < N; ++k) {
-            T const& element = v.at_unsafe(k);
+            T const& element = v.coeff(k);
             if (element > current_max)
                 current_max = element;
         }
@@ -485,7 +485,7 @@ namespace cgp
 
         T current_min = get<0>(v);
         for (int k = 1; k < N; ++k) {
-            T const& element = v.at_unsafe(k);
+            T const& element = v.coeff(k);
             if (element < current_min)
                 current_min = element;
         }
@@ -501,7 +501,7 @@ namespace cgp
     {
         T element = T(); // assume element is initialized at 0
         for (int k = 0; k < N; ++k)
-            element += v.at_unsafe(k);
+            element += v.coeff(k);
         return element;
     }
     template <typename T, int N> numarray_stack<T, N> abs(numarray_stack<T, N> const& a)

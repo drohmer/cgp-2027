@@ -155,29 +155,29 @@ namespace cgp
 
     vec4 const& matrix_stack<float, 4, 4>::operator[](int k1) const {
         check_index_bounds(k1, *this);
-        return at_unsafe(k1);
+        return coeff(k1);
     }
     vec4& matrix_stack<float, 4, 4>::operator[](int k1) {
         check_index_bounds(k1, *this);
-        return at_unsafe(k1);
+        return coeff(k1);
     }
 
     vec4 const& matrix_stack<float, 4, 4>::operator()(int k1) const {
         check_index_bounds(k1, *this);
-        return at_unsafe(k1);
+        return coeff(k1);
     }
     vec4& matrix_stack<float, 4, 4>::operator()(int k1) {
         check_index_bounds(k1, *this);
-        return at_unsafe(k1);
+        return coeff(k1);
     }
 
     float const& matrix_stack<float, 4, 4>::operator()(int k1, int k2) const {
         check_index_bounds(k1, k2, *this);
-        return at_unsafe(k1, k2);
+        return coeff(k1, k2);
     }
     float& matrix_stack<float, 4, 4>::operator()(int k1, int k2) {
         check_index_bounds(k1, k2, *this);
-        return at_unsafe(k1, k2);
+        return coeff(k1, k2);
     }
 
     float const& matrix_stack<float, 4, 4>::at_offset(int offset) const {
@@ -201,7 +201,7 @@ namespace cgp
                 int k2_res = 0;
                 for (int k2 = 0; k2 < 4; ++k2) {
                     if (k2 != idx2) {
-                        res.at_unsafe(k1_res, k2_res) = at_unsafe(k1, k2);
+                        res.coeff(k1_res, k2_res) = coeff(k1, k2);
                         ++k2_res;
                     }
                 }

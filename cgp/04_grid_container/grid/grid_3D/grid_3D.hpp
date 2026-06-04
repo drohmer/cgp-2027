@@ -68,10 +68,10 @@ struct grid_3D
     typename std::vector<T>::const_iterator cbegin() const;
     typename std::vector<T>::const_iterator cend() const;
 
-    T const& at_unsafe(int index) const;
-    T & at_unsafe(int index);           
-    T const& at_unsafe(int index1, int index2, int index3) const;
-    T & at_unsafe(int index1, int index2, int index3);
+    T const& coeff(int index) const;
+    T & coeff(int index);           
+    T const& coeff(int index1, int index2, int index3) const;
+    T & coeff(int index1, int index2, int index3);
 
 };
 
@@ -465,28 +465,28 @@ template <typename T> grid_3D<T>  operator/(float a, grid_3D<T> const& b)
 
 
 template <typename T>
-T const& grid_3D<T>::at_unsafe(int index) const
+T const& grid_3D<T>::coeff(int index) const
 {
-    return data.at_unsafe(index);
+    return data.coeff(index);
 }
 
 
 template <typename T>
-T & grid_3D<T>::at_unsafe(int index)
+T & grid_3D<T>::coeff(int index)
 {
-    return data.at_unsafe(index);
+    return data.coeff(index);
 }
 
 template <typename T>
-T const& grid_3D<T>::at_unsafe(int index1, int index2, int index3) const
+T const& grid_3D<T>::coeff(int index1, int index2, int index3) const
 {
-    return data.at_unsafe(offset_grid(index1, index2, index3, dimension.x, dimension.y));
+    return data.coeff(offset_grid(index1, index2, index3, dimension.x, dimension.y));
 }
 
 template <typename T>
-T & grid_3D<T>::at_unsafe(int index1, int index2, int index3)
+T & grid_3D<T>::coeff(int index1, int index2, int index3)
 {
-    return data.at_unsafe(offset_grid(index1, index2, index3, dimension.x, dimension.y));
+    return data.coeff(offset_grid(index1, index2, index3, dimension.x, dimension.y));
 }
 
 }

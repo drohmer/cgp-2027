@@ -52,8 +52,8 @@ namespace cgp
         T const* cbegin() const;
         T const* cend() const;
 
-        T const& at_unsafe(int index) const { return (&x)[index]; }
-        T& at_unsafe(int index) { return (&x)[index]; }
+        T const& coeff(int index) const { return (&x)[index]; }
+        T& coeff(int index) { return (&x)[index]; }
 
         /** Sub-vector */
         numarray_stack<T, 3> xyz() const;

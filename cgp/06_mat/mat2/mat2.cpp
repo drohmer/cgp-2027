@@ -73,29 +73,29 @@ namespace cgp
     vec2 const& mat2::operator[](int k2) const
     {
         check_index_bounds(k2, *this);
-        return at(k2);
+        return coeff(k2);
     }
     vec2& mat2::operator[](int k2)
     {
         check_index_bounds(k2, *this);
-        return at(k2);
+        return coeff(k2);
     }
 
     vec2 const& mat2::operator()(int k2) const
     {
         check_index_bounds(k2, *this);
-        return at(k2);
+        return coeff(k2);
     }
     vec2& mat2::operator()(int k2)
     {
         check_index_bounds(k2, *this);
-        return at(k2);
+        return coeff(k2);
     }
 
     float const& mat2::operator()(int k1, int k2) const
     {
         check_index_bounds(k1,k2, *this);
-        return at(k1,k2);
+        return coeff(k1,k2);
     }
     float& mat2::operator()(int k1, int k2)
     {
