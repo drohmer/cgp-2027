@@ -783,7 +783,7 @@ namespace cgp
         T s{};
         for(int k1=0; k1<N1; ++k1)
             for(int k2=0; k2<N2; ++k2)
-                s += m.at(k1,k2) * m.at(k1,k2);
+                s += m.at_unsafe(k1,k2) * m.at_unsafe(k1,k2);
 
         return sqrt(s);
     }
