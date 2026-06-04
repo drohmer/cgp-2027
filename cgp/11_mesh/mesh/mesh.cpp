@@ -152,7 +152,7 @@ namespace cgp
 			unsigned int f1 = face[1];
 			unsigned int f2 = face[2];
 
-			if (f0 > N || f1 > N || f2 > N)
+			if (f0 >= N || f1 >= N || f2 >= N)
 			{
 				std::cout<<warning+"Triangle "<<str(kt)<<" has index triplet ("<<str(f0)<<","<<str(f1)<<","<<str(f2)<<") exceeding the size of the position ["<<str(N)<<"]"<<std::endl;
 				return false; // critical error
@@ -304,12 +304,12 @@ namespace cgp
 	}
 
 
-	numarray<numarray<int> > connectivity_one_ring(numarray<uint3> const& connectivity)
+	numarray<numarray<int> > connectivity_one_ring(numarray<uint3> const& connectivity, int N_vertex)
 	{
-		size_t const N = connectivity.size();
+		size_t const N_tri = connectivity.size();
 		numarray<std::set<int> > one_ring;
-		one_ring.resize(N);
-		for (size_t k = 0; k < N; ++k)
+		one_ring.resize(N_vertex);
+		for (size_t k = 0; k < N_tri; ++k)
 		{
 			uint3 const& tri = connectivity[k];
 			one_ring[ get<0>(tri) ].insert( get<1>(tri) );
@@ -323,8 +323,8 @@ namespace cgp
 		}
 
 		numarray<numarray<int> > one_ring_buffer;
-		one_ring_buffer.resize(N);
-		for(int k=0; k<N; ++k)
+		one_ring_buffer.resize(N_vertex);
+		for(int k=0; k<N_vertex; ++k)
 			for(int idx : one_ring[k])
 				one_ring_buffer[k].push_back(idx);
 		return one_ring_buffer;
