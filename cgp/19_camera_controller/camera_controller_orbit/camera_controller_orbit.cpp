@@ -25,11 +25,11 @@ namespace cgp
 			if (click_left && !ctrl)     // Rotation of the camera around its center
 				camera_model.manipulator_rotate_arcball(p0, p1);
 			else if (click_left && ctrl) // Translate/Pan the camera in the viewspace plane
-				camera_model.manipulator_translate_in_plane(p1 - p0);
+				camera_model.manipulator_translate_in_plane(p0 - p1);
 			else if (click_right && !ctrl) // Move the camera closer/further with respect to its center
 				camera_model.manipulator_scale_distance_to_center((p1 - p0).y);
 			else if (click_right && ctrl) // Translate the camera center in front/back
-				camera_model.manipulator_translate_front((p1 - p0).y);
+				camera_model.manipulator_translate_front((p0 - p1).y);
 		}
 
 	}
