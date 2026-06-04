@@ -377,5 +377,106 @@ namespace cgp_test
 			assert_cgp_no_msg(is_equal(M[3], numarray_stack<int,2>{7,8}));
 			assert_cgp_no_msg(is_equal(M(3), numarray_stack<int,2>{7,8}));
 		}
+
+		// members added to the mat2/mat3 specializations to match the generic API
+		{
+			using namespace cgp;
+
+			// remove_row_column
+			mat3 const A = { 1,2,3, 4,5,6, 7,8,9 };
+			assert_cgp_no_msg(is_equal(A.remove_row_column(1,1), mat2{ 1,3, 7,9 }));
+			mat2 const B = { 1,2, 3,4 };
+			assert_cgp_no_msg(is_equal(B.remove_row_column(0,0), matrix_stack<float,1,1>{ 4 }));
+
+			// set_block (including a block touching the last row/column)
+			assert_cgp_no_msg(is_equal(mat3().set_block(mat2{1,2,3,4}, 1, 1),
+				mat3{ 0,0,0, 0,1,2, 0,3,4 }));
+			assert_cgp_no_msg(is_equal(mat2().set_block(matrix_stack<float,1,1>{5}, 1, 1),
+				mat2{ 0,0, 0,5 }));
+
+			// at_unsafe(row) and at_offset_unsafe
+			assert_cgp_no_msg(is_equal(B.at_unsafe(1), vec2{ 3,4 }));
+			assert_cgp_no_msg(is_equal(B.at_offset_unsafe(2), 3.0f));
+		}
+	}
+
+
+	// ---------------------------------------------------------------------------
+	//  Conformity check (mostly compile-time).
+	//   require_*_api<M>() touches the whole member/static API. Instantiating it on the
+	//   specializations (mat2/mat3/mat4) and on the generic template forces every type to
+	//   provide the same surface; a missing method makes the build fail.
+	// ---------------------------------------------------------------------------
+	template <typename M>
+	static void require_generic_matrix_api()
+	{
+		using namespace cgp;
+		using T = std::decay_t<decltype(M().at_offset_unsafe(0))>;
+
+		M m = M::build_identity();   // build_identity (static) + defined elements
+		M const& c = m;
+
+		// size / dimension / fill
+		(void)m.size();
+		(void)m.dimension();
+		m.fill(c.at_offset_unsafe(0));
+
+		// element access (const and non-const) — every accessor variant
+		(void)c(0,0);              (void)m(0,0);
+		(void)c[0];                (void)m[0];
+		(void)c(0);               (void)m(0);
+		(void)c.at(0,0);          (void)m.at(0,0);
+		(void)c.at_unsafe(0,0);   (void)m.at_unsafe(0,0);
+		(void)c.at_unsafe(0);     (void)m.at_unsafe(0);    // row accessor that had been forgotten on mat2/mat3
+		(void)c.at_offset(0);     (void)m.at_offset(0);
+		(void)c.at_offset_unsafe(0); (void)m.at_offset_unsafe(0);
+
+		// iterators
+		(void)m.begin(); (void)m.end();
+		(void)c.begin(); (void)c.end(); (void)c.cbegin(); (void)c.cend();
+
+		// sub-matrix manipulation
+		(void)c.remove_row_column(0,0);
+		m.set_block(M::build_identity(), 0, 0);   // a full block at offset 0 (needs set_block with <=)
+
+		// free functions that must resolve for the type
+		(void)norm(c);
+		(void)type_str(c);
+		(void)str(c);
+
+		// scalar / matrix operators
+		M r = c + c;  r = c - c;  r = -c;
+		r += c; r -= c;
+		r = c * T(2); r = T(2) * c; r *= T(2);
+		r = c / T(2); r /= T(2);
+		(void)r;
+	}
+
+	template <typename M>
+	static void require_mat_specialization_api()
+	{
+		// build_zero exists on mat2/mat3/mat4 but not on the generic template:
+		//  this catches a specialization that forgot it (as mat2 once did).
+		(void)M::build_zero();
+	}
+
+	void test_matrix_conformity()
+	{
+		using namespace cgp;
+
+		// specializations must expose everything the generic template exposes
+		require_generic_matrix_api<mat2>();
+		require_generic_matrix_api<mat3>();
+		require_generic_matrix_api<mat4>();
+
+		// reference instances of the *generic* template: float square sizes that are NOT
+		//  specialized (only 2x2/3x3/4x4 are), so these exercise the generic matrix_stack itself.
+		require_generic_matrix_api<matrix_stack<float,5,5>>();
+		require_generic_matrix_api<matrix_stack<float,6,6>>();
+
+		// the three specializations must also agree on their shared extra API
+		require_mat_specialization_api<mat2>();
+		require_mat_specialization_api<mat3>();
+		require_mat_specialization_api<mat4>();
 	}
 }
