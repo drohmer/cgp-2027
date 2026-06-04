@@ -116,6 +116,9 @@ namespace cgp
         inline float const& at(int k1, int k2) const;
         inline float& at(int k1, int k2);
 
+        inline float const& at_unsafe(int k1, int k2) const { return at(k1, k2); }
+        inline float& at_unsafe(int k1, int k2)             { return at(k1, k2); }
+
         inline float const& at_offset(int offset) const;
         inline float& at_offset(int offset);
 
