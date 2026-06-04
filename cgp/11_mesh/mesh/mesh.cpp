@@ -279,8 +279,12 @@ namespace cgp
 	mesh& mesh::apply_transform(cgp::affine const& M) {
 		for (vec3& p : position)
 			p = M*p;
+		// Normals transform by the inverse-transpose of the linear part.
+		//  The linear part is diag(scaling_xyz)*scaling*R, so the normal map reduces to
+		//  normalize( diag(1/scaling_xyz) * (R*n) ) (the uniform scaling cancels under normalization).
 		for(vec3& n : normal) {
-			n = M.rotation*n;
+			vec3 const Rn = M.rotation*n;
+			n = normalize(vec3{Rn.x/M.scaling_xyz.x, Rn.y/M.scaling_xyz.y, Rn.z/M.scaling_xyz.z});
 		}
 		return *this;
 	}

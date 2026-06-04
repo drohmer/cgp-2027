@@ -21,6 +21,7 @@ INCLUDE_MODULES = [
     "08_random_noise",
     "09_geometric_transformation",
     "10_camera_model",
+    "11_mesh",
 ]
 
 
