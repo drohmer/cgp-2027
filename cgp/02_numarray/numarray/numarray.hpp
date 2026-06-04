@@ -16,7 +16,7 @@ namespace cgp
  *
  * The numarray structure is a wrapper around an std::vector with additional convenient functionalities
  * - Overloaded operators + - * / as well as common outputs
- * - Strict bound checking with operator [] and () (unless cgp_NO_DEBUG is defined)
+ * - Strict bound checking with operator [] and () (unless CGP_NO_DEBUG is defined)
  *
  * Numarray follows the main syntax than std::vector
  * Elements in a numarray are stored contiguously in memory (use std::vector internally)
@@ -56,7 +56,7 @@ struct numarray
 
     /** Element access
      * Allows numarray[i], numarray(i), and numarray.at(i)
-     * Bound checking is performed unless cgp_NO_DEBUG is defined. */
+     * Bound checking is performed unless CGP_NO_DEBUG is defined. */
     T const& operator[](int index) const;
     T& operator[](int index);
     T const& operator()(int index) const;
@@ -443,7 +443,7 @@ template <typename T> T max(numarray<T> const& v)
 template <typename T> T min(numarray<T> const& v)
 {
     int const N = v.size();
-    assert_cgp(N>0, "Cannot get max on empty numarray");
+    assert_cgp(N>0, "Cannot get min on empty numarray");
 
     T current_min = v[0];
     for (int k = 1; k < N; ++k) {
@@ -481,8 +481,10 @@ numarray<T>  operator+(numarray<T> const& a, numarray<T> const& b)
 template <typename T>
 numarray<T>  operator+(numarray<T> const& a, T const& b)
 {
-    numarray<T> res = a;
-    res += b;
+    int const N = a.size();
+    numarray<T> res(N);
+    for(int k=0; k<N; ++k)
+        res[k] = a[k]+b;
     return res;
 }
 
@@ -638,6 +640,7 @@ numarray<T> numarray<T>::linespace(T const& p1, T const& p2, int N)
 
 template <typename T> auto const* ptr(numarray<T> const& v)
 {
+    assert_cgp(v.size()>0, "Cannot get ptr of an empty numarray");
     using cgp::ptr;
     return ptr(v[0]);
 }
