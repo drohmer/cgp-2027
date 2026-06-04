@@ -340,6 +340,23 @@ namespace cgp_test
 			// {1,1,1,1}: sqrt(1+1+1+1) = 2
 			cgp::mat2 M2 = {1.0f,1.0f, 1.0f,1.0f};
 			assert_cgp_no_msg(cgp::is_equal(cgp::norm(M2), 2.0f));
+			// norm on mat3 (used at_unsafe on specialization — now uses at)
+			cgp::mat3 M3 = {1.0f,0.0f,0.0f, 0.0f,1.0f,0.0f, 0.0f,0.0f,1.0f};
+			assert_cgp_no_msg(cgp::is_equal(cgp::norm(M3), std::sqrt(3.0f)));
+		}
+
+		// set_block at corner offset (2,2): requires N+offset <= N_mat, not strictly <
+		{
+			using namespace cgp;
+			assert_cgp_no_msg(is_equal(
+				mat4().set_block(mat2{1,2,3,4}, 2, 2),
+				mat4{0,0,0,0, 0,0,0,0, 0,0,1,2, 0,0,3,4}));
+			assert_cgp_no_msg(is_equal(
+				mat4().set_block(mat2{1,2,3,4}, 0, 2),
+				mat4{0,0,1,2, 0,0,3,4, 0,0,0,0, 0,0,0,0}));
+			assert_cgp_no_msg(is_equal(
+				mat4().set_block(mat2{1,2,3,4}, 2, 0),
+				mat4{0,0,0,0, 0,0,0,0, 1,2,0,0, 3,4,0,0}));
 		}
 	}
 }
