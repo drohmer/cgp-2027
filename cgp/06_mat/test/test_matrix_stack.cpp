@@ -358,5 +358,24 @@ namespace cgp_test
 				mat4().set_block(mat2{1,2,3,4}, 2, 0),
 				mat4{0,0,0,0, 0,0,0,0, 1,2,0,0, 3,4,0,0}));
 		}
+
+		// generic matrix_stack::set_block (non-specialized type) must also accept a block
+		//  that touches the last row/column: offset+size == N is valid, not only offset+size < N
+		{
+			using namespace cgp;
+			matrix_stack<int,4,4> M; M.fill(0);
+			M.set_block(matrix_stack<int,2,2>{1,2,3,4}, 2, 2);
+			assert_cgp_no_msg(is_equal(M, matrix_stack<int,4,4>{
+				0,0,0,0, 0,0,0,0, 0,0,1,2, 0,0,3,4}));
+		}
+
+		// single-index access matrix_stack[k1]/(k1) returns the k1-th ROW, so the valid
+		//  range is [0,N1-1] even when N1>N2 (the bounds check must use N1, not N2)
+		{
+			using namespace cgp;
+			matrix_stack<int,4,2> M = {1,2, 3,4, 5,6, 7,8};
+			assert_cgp_no_msg(is_equal(M[3], numarray_stack<int,2>{7,8}));
+			assert_cgp_no_msg(is_equal(M(3), numarray_stack<int,2>{7,8}));
+		}
 	}
 }

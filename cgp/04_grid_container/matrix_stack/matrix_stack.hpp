@@ -344,32 +344,34 @@ namespace cgp
     }
 
     template <typename T, int N1, int N2>
-    void check_index_bounds(int index2, matrix_stack<T, N1, N2> const& data)
+    void check_index_bounds(int index1, matrix_stack<T, N1, N2> const& data)
     {
+        // Single-index access matrix_stack[k1] / matrix_stack(k1) returns the k1-th row,
+        //  so k1 must be checked against the number of rows N1 (not the number of columns N2).
 #ifndef CGP_NO_DEBUG
-        if (index2 < 0 || index2 >= N2)
+        if (index1 < 0 || index1 >= N1)
         {
             std::string msg = "\n";
 
-            msg += "\t> Try to access matrix_stack(" + str(index2) + ")\n";
+            msg += "\t> Try to access matrix_stack(" + str(index1) + ")\n";
             msg += "\t>    - matrix_stack has dimension = (" + str(N1) + "," + str(N2) + ")\n";
-            msg += "\t>    - maximal first index is = (" + str(N2-1) + ")\n";
+            msg += "\t>    - maximal first index is = (" + str(N1-1) + ")\n";
             msg += "\t>    - Type of matrix_stack: " + type_str(data) + "\n";
 
-            if (index2 < 0)
+            if (index1 < 0)
             {
                 msg += "\t> Buffer cannot be access with negative index.\n";
             }
-            else if (N2 == 0)
+            else if (N1 == 0)
             {
                 msg += "\t> The buffer is empty, its elements cannot be accessed.\n";
             }
-            else if (index2 == N2)
+            else if (index1 == N1)
             {
                 msg += "\t> Index reached the maximal size of the buffer \n";
                 msg += "\t> The maximal possible indexes should be (" + str(N1 - 1) + "," + str(N2 - 1) + ") \n";
             }
-            else if (index2 >= N2)
+            else if (index1 >= N1)
             {
                 msg += "\t> Exceeded buffer dimension \n";
             }
@@ -473,10 +475,10 @@ namespace cgp
     template <int N1_arg, int N2_arg>
     matrix_stack<T, N1, N2>& matrix_stack<T, N1, N2>::set_block(matrix_stack<T, N1_arg, N2_arg> const& block, int offset_1, int offset_2)
     {
-        static_assert(N1_arg < N1, "Block size is too large for the current matrix");
-        static_assert(N2_arg < N2, "Block size is too large for the current matrix");
-        assert_cgp(N1_arg + offset_1 < N1, "Block size exceed current matrix size");
-        assert_cgp(N2_arg + offset_2 < N2, "Block size exceed current matrix size");
+        static_assert(N1_arg <= N1, "Block size is too large for the current matrix");
+        static_assert(N2_arg <= N2, "Block size is too large for the current matrix");
+        assert_cgp(N1_arg + offset_1 <= N1, "Block size exceed current matrix size");
+        assert_cgp(N2_arg + offset_2 <= N2, "Block size exceed current matrix size");
 
         for (int k1 = 0; k1 < N1_arg; ++k1) {
             int const idx_1 = k1 + offset_1;
