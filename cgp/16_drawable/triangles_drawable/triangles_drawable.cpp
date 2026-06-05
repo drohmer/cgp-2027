@@ -223,13 +223,10 @@ namespace cgp
 		// Final model matrix in the shader is: hierarchy_transform_model * model
 		mat4 const model_shader = hierarchy_transform_model.matrix() * model.matrix();
 
-		// The normal matrix is transpose( (hierarchy_transform_model * model)^{-1} )
-		mat4 const model_normal_shader = transpose(inverse(model).matrix() * inverse(hierarchy_transform_model).matrix());
-		
-
 		// set the Model matrix
+		//  Note: the normal matrix transpose(inverse(model)) is derived in the vertex shader
+		//  (consistent with mesh_drawable), so no modelNormal uniform is sent from here.
 		opengl_uniform(shader, "model", model_shader, expected);
-		opengl_uniform(shader, "modelNormal", model_normal_shader, expected);
 
 		// set the material
 		material.send_opengl_uniform(shader);
