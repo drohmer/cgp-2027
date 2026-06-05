@@ -13,7 +13,7 @@ namespace cgp
 	}
 
 
-	std::string camera_controller_generic_base::doc_usage()
+	std::string camera_controller_generic_base::doc_usage() const
 	{
 		std::string doc = "You seem to be using a Controller Generic Base - This controller is only a generic class and should be specialized.\n";
 		return doc;

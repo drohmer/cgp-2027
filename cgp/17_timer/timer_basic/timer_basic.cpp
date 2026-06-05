@@ -6,15 +6,15 @@ namespace cgp
 {
 
 timer_basic::timer_basic()
-	:t(0),scale(1.0f),running(true),time_previous(static_cast<float>(glfwGetTime()))
+	:t(0),scale(1.0f),running(true),time_previous(glfwGetTime())
 {}
 float timer_basic::update()
 {
 	if(!running)
         return 0.0f;
 
-    const float time_current = static_cast<float>(glfwGetTime());
-    const float dt = scale*(time_current-time_previous);
+    const double time_current = glfwGetTime();
+    const float dt = static_cast<float>(scale*(time_current-time_previous));
 
     time_previous = time_current;
     t += dt;
@@ -24,7 +24,7 @@ float timer_basic::update()
 void timer_basic::start()
 {
     running = true;
-    time_previous = static_cast<float>(glfwGetTime());
+    time_previous = glfwGetTime();
 }
 void timer_basic::stop()
 {

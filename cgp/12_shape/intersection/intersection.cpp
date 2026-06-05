@@ -35,7 +35,7 @@ namespace cgp
         size_t const N = centers.size();
         
         float t_closest = 0.0f;
-        int index_closest = 0;
+        int index_closest = -1;
         intersection_structure intersection_closest;
         bool first = true;
         for (size_t k = 0; k < N; ++k)

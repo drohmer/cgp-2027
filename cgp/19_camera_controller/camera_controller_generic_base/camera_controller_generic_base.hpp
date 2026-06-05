@@ -43,7 +43,7 @@ namespace cgp
 		window_structure* window = nullptr;
 
 		// Function that should display a doc on how to use the camera controller
-		std::string doc_usage();
+		std::string doc_usage() const;
 	};
 
 

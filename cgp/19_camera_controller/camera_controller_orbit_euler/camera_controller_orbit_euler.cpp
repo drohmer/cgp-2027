@@ -19,7 +19,7 @@ namespace cgp
 		vec2 const dp = p1 - p0;
 
 		bool const event_valid = !inputs->mouse.on_gui;
-		bool const click_left = inputs->mouse.click.left && !(inputs->mouse.click.left && inputs->keyboard.is_pressed("k"));
+		bool const click_left = inputs->mouse.click.left && !inputs->keyboard.is_pressed("k");
 		bool const click_right = inputs->mouse.click.right || (inputs->mouse.click.left && inputs->keyboard.is_pressed("k"));
 		bool const ctrl = inputs->keyboard.ctrl;
 

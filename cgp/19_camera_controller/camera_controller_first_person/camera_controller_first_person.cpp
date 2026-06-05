@@ -41,6 +41,8 @@ namespace cgp
 
 	void camera_controller_first_person::action_keyboard()
 	{
+		assert_cgp_no_msg(inputs != nullptr);
+		assert_cgp_no_msg(window != nullptr);
 		if ( inputs->keyboard.last_action.is_pressed(GLFW_KEY_C) && inputs->keyboard.shift) {
 			is_cursor_trapped = !is_cursor_trapped;
 			if (is_cursor_trapped)

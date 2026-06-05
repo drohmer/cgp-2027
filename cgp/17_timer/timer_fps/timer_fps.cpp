@@ -10,13 +10,13 @@ namespace cgp
 
     float timer_fps::update()
     {
-        float const elapsed_time = t_periodic;
-        ++counter;
+        if(running) ++counter;
 
         float const dt = timer_event_periodic::update();
         if (event)
         {
-            fps = counter/elapsed_time;
+            if(event_period > 1e-6f)
+                fps = int(counter / event_period);
             counter = 0;
         }
 

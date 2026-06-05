@@ -28,17 +28,17 @@ namespace cgp
 		// Compute the marching cube
 		std::vector<vec3> position;
 		std::vector<marching_cube_relative_coordinates> relative;
-		int const N = marching_cube(position, field.data.data, domain, iso, &relative);
+		size_t const N = marching_cube(position, field.data.data, domain, iso, &relative);
 
 
 		// Compute the mesh with non-duplicated vertices
 		mesh m;
-		int const N_triangle = N / 3;
+		size_t const N_triangle = N / 3;
 
 		// Storage avoiding to duplicate vertices at the same position if they are on the same voxel edge
 		std::unordered_map<std::pair<int, int>, int, hash_edge> unique_edge;
 
-		for (int k_tri = 0; k_tri < N_triangle; ++k_tri) {
+		for (int k_tri = 0; k_tri < int(N_triangle); ++k_tri) {
 
 			uint3 triangle_index;
 			for (int k = 0; k < 3; ++k) {

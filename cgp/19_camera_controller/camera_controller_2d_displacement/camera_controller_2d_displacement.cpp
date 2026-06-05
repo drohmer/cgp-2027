@@ -20,7 +20,8 @@ namespace cgp
 
 		vec3 const& up = camera_model.axis_of_rotation;
 		vec3 const& front = camera_model.front();
-		vec3 const move_front = front - dot(front, up) * up;
+		vec3 move_front = front - dot(front, up) * up;
+		if (float const len = norm(move_front); len > 1e-4f) move_front /= len;
 
 
 		if (event_valid) {
@@ -56,7 +57,9 @@ namespace cgp
 
 		// Constraint displacement on the plane
 		vec3 move_front = front - dot(front, up) * up;
+		if (float const len = norm(move_front); len > 1e-4f) move_front /= len;
 		vec3 move_right = right - dot(right, up) * up;
+		if (float const len = norm(move_right); len > 1e-4f) move_right /= len;
 
 
 		if (inputs->keyboard.up || inputs->keyboard.is_pressed(GLFW_KEY_W))

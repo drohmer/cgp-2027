@@ -16,7 +16,7 @@ namespace cgp
 
 	protected:
 		bool running;
-		float time_previous;
+		double time_previous;
 	};
 
 }

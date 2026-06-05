@@ -22,7 +22,7 @@ void camera_controller_fly_mode::action_mouse_move()
 			if (click_left)
 				camera_model.manipulator_rotate_roll_pitch_yaw(-dp.x, dp.y, 0);
 		}
-		else if (is_cursor_trapped)
+		else
 			camera_model.manipulator_rotate_roll_pitch_yaw(-dp.x, dp.y, 0);
 	}
 
