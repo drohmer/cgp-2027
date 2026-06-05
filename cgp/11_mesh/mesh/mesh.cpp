@@ -18,11 +18,11 @@ namespace cgp
 		assert_cgp_no_msg(N>0);
 		assert_cgp(connectivity.size()>0, "Connectivity doesn't have any triangle");
 
-		if(normal.size()<N)
+		if(size_t(normal.size())<N)
 			normal = normal_per_vertex(position, connectivity);
-		if(color.size()<N)
+		if(size_t(color.size())<N)
 			color.resize(N).fill(vec3{1.0f, 1.0f, 1.0f});
-		if(uv.size()<N)
+		if(size_t(uv.size())<N)
 			uv.resize(N).fill(vec2{0.0f, 0.0f});
 
 		return *this;
@@ -48,7 +48,7 @@ namespace cgp
 	void normal_per_vertex(numarray<vec3> const& position, numarray<uint3> const& connectivity, numarray<vec3>& normals, bool invert)
 	{
 		size_t const N = position.size();
-		if(normals.size()!=N)
+		if(size_t(normals.size())!=N)
 			normals.resize(N);
 		normals.fill(vec3{0,0,0});
 
@@ -125,17 +125,17 @@ namespace cgp
 
 		if (m.normal.size()==0)
 		{std::cout<<warning+"Mesh doesn't have any per-vertex normal defined"<<std::endl; ok=false;}
-		else if (m.normal.size()!=N)
+		else if (size_t(m.normal.size())!=N)
 		{std::cout<<warning+"Mesh has incoherent size of per-vertex normal"<<std::endl; ok=false;}
 
 		if(m.uv.size()==0)
 		{std::cout<<warning+"Mesh doesn't have any per-vertex uv defined"<<std::endl; ok=false;}
-		else if(m.uv.size()!=N)
+		else if(size_t(m.uv.size())!=N)
 		{std::cout<<warning+"Mesh has incoherent size of per-vertex uv"<<std::endl; ok=false;}
 		
 		if(m.color.size()==0)
 		{std::cout<<warning+"Mesh doesn't have any per-vertex color defined"<<std::endl; ok=false;}
-		else if(m.color.size()!=N)
+		else if(size_t(m.color.size())!=N)
 		{std::cout<<warning+"Mesh has incoherent size of per-vertex color"<<std::endl; ok=false;}
 
 		size_t const N_triangle = m.connectivity.size();

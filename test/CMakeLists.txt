@@ -28,6 +28,8 @@ file(GLOB_RECURSE CGP_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/10_camera_model/*.[ch]pp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/11_mesh/*.[ch]pp"
     "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/12_shape/*.[ch]pp"
+    # Module 17 (timer) is GL-free once the clock is abstracted from glfwGetTime.
+    "${CMAKE_CURRENT_SOURCE_DIR}/../cgp/17_timer/*.[ch]pp"
     # GL-free sub-parts of higher modules (the rest of these modules needs OpenGL):
     #  - 20_format_parser: only the simple obj loader (obj_advanced/ pulls in mesh_drawable)
     #  - 21_scene_project_helper: only the path helper

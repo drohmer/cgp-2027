@@ -23,6 +23,8 @@ INCLUDE_MODULES = [
     "10_camera_model",
     "11_mesh",
     "12_shape",
+    # Module 17 is GL-free once its clock is abstracted (timer_set_time_source).
+    "17_timer",
     # Modules 13+ depend on OpenGL/GLFW and are excluded. The two entries below
     #  are scanned only for their GL-free sub-parts (obj loader, path helper);
     #  the matching CMake GLOB compiles just those sub-directories.

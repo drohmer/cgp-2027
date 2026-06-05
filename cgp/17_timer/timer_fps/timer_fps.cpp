@@ -1,6 +1,5 @@
 #include "timer_fps.hpp"
 
-#include <GLFW/glfw3.h>
 
 namespace cgp
 {

@@ -1,7 +1,6 @@
 #include "cgp/01_base/base.hpp"
 #include "timer_interval.hpp"
 
-#include <GLFW/glfw3.h>
 
 namespace cgp
 {
