@@ -23,6 +23,11 @@ INCLUDE_MODULES = [
     "10_camera_model",
     "11_mesh",
     "12_shape",
+    # Modules 13+ depend on OpenGL/GLFW and are excluded. The two entries below
+    #  are scanned only for their GL-free sub-parts (obj loader, path helper);
+    #  the matching CMake GLOB compiles just those sub-directories.
+    "20_format_parser",
+    "21_scene_project_helper",
 ]
 
 
