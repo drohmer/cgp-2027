@@ -18,7 +18,7 @@ namespace cgp {
 		success = false;
 		int k_attempt = 0;
 		std::string current_root = "";
-		for (k_attempt = 0; k_attempt < attempt_root.size() && !success; ++k_attempt) {
+		for (k_attempt = 0; k_attempt < int(attempt_root.size()) && !success; ++k_attempt) {
 			current_root = attempt_root[k_attempt];
 			success = cgp::check_path_exist(current_root + directory_to_find);
 		}

@@ -53,13 +53,13 @@ namespace cgp
         std::ofstream stream(filename, std::ofstream::out);
         assert_cgp(stream.is_open(), "Cannot open file " + str(filename));
 
-        for (int k = 0; k < position.size(); ++k)
+        for (int k = 0; k < int(position.size()); ++k)
             stream << "v " << position[k].x << " " << position[k].y <<" " << position[k].z << std::endl;
-        for (int k = 0; k < normal.size(); ++k)
+        for (int k = 0; k < int(normal.size()); ++k)
             stream << "vn " << normal[k].x << " " << normal[k].y <<" " << normal[k].z << std::endl;
 
         assert_cgp(position.size() % 3 == 0, "mesh_save_file_obj: position count must be a multiple of 3 for triangle soup");
-        for (int k = 0; k < position.size()/3; k++) {
+        for (int k = 0; k < int(position.size())/3; k++) {
             std::string const u0 = str(3*k+1);
             std::string const u1 = str(3*k+2);
             std::string const u2 = str(3*k+3);
@@ -223,88 +223,49 @@ std::pair<mesh, std::map<int3, int, comparator_int3>>
 
 
 namespace loader{
-std::vector<vec3> obj_read_positions(const std::string& filename)
+// Read every value introduced by a given keyword ("v", "vn", "vt", ...) in an .obj file.
+//  read_one extracts a single element from the remainder of a matching line.
+// Factors the otherwise-identical bodies of obj_read_positions/normals/texture_uv.
+template <typename T, typename FUNC>
+static std::vector<T> obj_read_values(std::string const& filename, std::string const& keyword, FUNC read_one)
 {
     assert_file_exist(filename);
-    std::vector<vec3> positions;
+    std::vector<T> values;
 
     std::ifstream stream(filename);
     assert_cgp(stream.is_open(), "Cannot open file "+str(filename));
-    while(stream.good()) {
-        std::string buffer;
-        std::getline(stream,buffer);
-        if( buffer.size()>0 )
-        {
-            std::stringstream tokens_buffer(buffer);
-            std::string first_word;
-            tokens_buffer >> first_word;
-            if( first_word.size()>0 && first_word[0]!='#' ) {
-                if( first_word=="v" ) {
-                    vec3 p;
-                    tokens_buffer >> p.x >> p.y >> p.z;
-                    positions.push_back(p);
-                }
-            }
-        }
+
+    std::string buffer;
+    while( std::getline(stream, buffer) ) {
+        if( buffer.empty() )
+            continue;
+        std::stringstream tokens_buffer(buffer);
+        std::string first_word;
+        tokens_buffer >> first_word;
+        if( first_word==keyword )
+            values.push_back( read_one(tokens_buffer) );
     }
     stream.close();
-    return positions;
+
+    return values;
+}
+
+std::vector<vec3> obj_read_positions(const std::string& filename)
+{
+    return obj_read_values<vec3>(filename, "v",
+        [](std::stringstream& t){ vec3 p; t >> p.x >> p.y >> p.z; return p; });
 }
 
 std::vector<vec3> obj_read_normals(const std::string& filename)
 {
-    assert_file_exist(filename);
-    std::vector<vec3> normals;
-
-    std::ifstream stream(filename);
-    assert_cgp(stream.is_open(), "Cannot open file "+str(filename));
-    while(stream.good()) {
-        std::string buffer;
-        std::getline(stream,buffer);
-        if( buffer.size()>0 )
-        {
-            std::stringstream tokens_buffer(buffer);
-            std::string first_word;
-            tokens_buffer >> first_word;
-            if( first_word.size()>0 && first_word[0]!='#' ) {
-                if( first_word=="vn" ) {
-                    vec3 n;
-                    tokens_buffer >> n.x >> n.y >> n.z;
-                    normals.push_back(n);
-                }
-            }
-        }
-    }
-    stream.close();
-    return normals;
+    return obj_read_values<vec3>(filename, "vn",
+        [](std::stringstream& t){ vec3 n; t >> n.x >> n.y >> n.z; return n; });
 }
 
 std::vector<vec2> obj_read_texture_uv(const std::string& filename)
 {
-    assert_file_exist(filename);
-    std::vector<vec2> texture_uv;
-
-    std::ifstream stream(filename);
-    assert_cgp(stream.is_open(), "Cannot open file "+str(filename));
-    while(stream.good()) {
-        std::string buffer;
-        std::getline(stream,buffer);
-        if( buffer.size()>0 )
-        {
-            std::stringstream tokens_buffer(buffer);
-            std::string first_word;
-            tokens_buffer >> first_word;
-            if( first_word.size()>0 && first_word[0]!='#' ) {
-                if( first_word=="vt" ) {
-                    vec2 uv;
-                    tokens_buffer >> uv.x >> uv.y;
-                    texture_uv.push_back( {uv.x, uv.y} );
-                }
-            }
-        }
-    }
-    stream.close();
-    return texture_uv;
+    return obj_read_values<vec2>(filename, "vt",
+        [](std::stringstream& t){ vec2 uv; t >> uv.x >> uv.y; return uv; });
 }
 
 

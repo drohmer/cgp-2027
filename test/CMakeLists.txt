@@ -59,6 +59,8 @@ else()
     target_compile_options(cgp_test PRIVATE
         -Wall -Wextra -pedantic
         -Wfatal-errors -Wno-pragmas -Wno-unknown-warning-option
-        -Wno-sign-compare -Wno-type-limits
+        # Strict warnings on the test build: -Wsign-compare and -Wtype-limits
+        #  (both part of -Wextra) catch the recurring signed/unsigned and npos bug classes.
+        -Wsign-compare -Wtype-limits
     )
 endif()
