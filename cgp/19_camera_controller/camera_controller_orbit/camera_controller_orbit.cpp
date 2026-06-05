@@ -7,10 +7,7 @@ namespace cgp
 {
 	void camera_controller_orbit::action_mouse_move()
 	{
-		// Preconditions
-		assert_cgp_no_msg(inputs != nullptr);
-		assert_cgp_no_msg(window != nullptr);
-		if (!is_active) return;
+		if (!is_ready()) return;
 
 		vec2 const& p1 = inputs->mouse.position.current;
 		vec2 const& p0 = inputs->mouse.position.previous;
@@ -36,10 +33,7 @@ namespace cgp
 
 	void camera_controller_orbit::idle_frame()
 	{
-		// Preconditions
-		assert_cgp_no_msg(inputs != nullptr);
-		assert_cgp_no_msg(window != nullptr);
-		if (!is_active) return;
+		if (!is_ready()) return;
 
 		float const angle_magnitude = inputs->time_interval;
 		if (inputs->keyboard.left || inputs->keyboard.is_pressed(GLFW_KEY_R)) {

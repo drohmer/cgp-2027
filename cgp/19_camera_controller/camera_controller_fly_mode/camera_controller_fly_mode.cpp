@@ -5,10 +5,7 @@ namespace cgp
 
 void camera_controller_fly_mode::action_mouse_move()
 {
-	// Preconditions
-	assert_cgp_no_msg(inputs != nullptr);
-	assert_cgp_no_msg(window != nullptr);
-	if (!is_active) return;
+	if (!is_ready()) return;
 
 	vec2 const& p1 = inputs->mouse.position.current;
 	vec2 const& p0 = inputs->mouse.position.previous;
@@ -31,10 +28,7 @@ void camera_controller_fly_mode::action_mouse_move()
 
 void camera_controller_fly_mode::idle_frame()
 {
-	// Preconditions
-	assert_cgp_no_msg(inputs != nullptr);
-	assert_cgp_no_msg(window != nullptr);
-	if (!is_active) return;
+	if (!is_ready()) return;
 
 	float const magnitude = inputs->time_interval;
 
