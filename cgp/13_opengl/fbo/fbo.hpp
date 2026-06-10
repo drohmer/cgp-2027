@@ -68,5 +68,8 @@ namespace cgp {
 		// Update the screen size (resize the texture if needed)
 		void update_screen_size(int window_width, int windows_height);
 
+		// Free the GPU resources (framebuffer, depth buffer, textures) and reset the ids
+		void clear();
+
 	};
 }

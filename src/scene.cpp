@@ -25,9 +25,6 @@ void scene_structure::initialize()
 	// General information
 	display_info();
 
-	// Connect camera controller to input system and window
-	camera_control.initialize(inputs, window);
-	
 	// Create 3D coordinate frame (x, y, z axes) for visual reference
 	global_frame.initialize_data_on_gpu(mesh_primitive_frame());
 
@@ -55,6 +52,9 @@ void scene_structure::initialize()
 // Note that you should avoid having costly computation and large allocation defined there. This function is mostly used to call the draw() functions on pre-existing data.
 void scene_structure::display_frame()
 {
+	// Update the view matrix from the camera controller state
+	environment.camera_view = camera_control.camera().matrix_view();
+
 	// Set the light to the current position of the camera
 	environment.light = camera_control.camera_model.position();
 
@@ -89,20 +89,20 @@ void scene_structure::display_gui()
 void scene_structure::mouse_move_event()
 {
 	if (!inputs.keyboard.shift)
-		camera_control.action_mouse_move(environment.camera_view);
+		camera_control.action_mouse_move();
 	
 }
 void scene_structure::mouse_click_event()
 {
-	camera_control.action_mouse_click(environment.camera_view);
+	camera_control.action_mouse_click();
 }
 void scene_structure::keyboard_event()
 {
-	camera_control.action_keyboard(environment.camera_view);
+	camera_control.action_keyboard();
 }
 void scene_structure::idle_frame()
 {
-	camera_control.idle_frame(environment.camera_view);
+	camera_control.idle_frame();
 	
 }
 

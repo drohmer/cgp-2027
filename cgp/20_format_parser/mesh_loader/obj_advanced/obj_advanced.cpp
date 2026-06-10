@@ -91,6 +91,9 @@ namespace cgp
 
 				// Loop over vertices in the face.
 				size_t fv = size_t(shapes[shape_idx].mesh.num_face_vertices[f]);
+				// The connectivity below pushes exactly one triangle per face: this relies on
+				//  tinyobj triangulating the polygons (reader_config.triangulate is true by default).
+				assert_cgp(fv == 3, "mesh_load_file_obj_advanced expects triangulated faces (got a face with " + str(fv) + " vertices)");
 				for (size_t v = 0; v < fv; v++) {
 					// access to vertex
 					tinyobj::index_t idx = shapes[shape_idx].mesh.indices[index_offset + v];

@@ -2,6 +2,8 @@
 #include "scene.hpp"
 
 #include <stdexcept>
+#include <thread>
+#include <chrono>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
@@ -64,7 +66,9 @@ void application_structure::start_loop()
         animation_loop();
 
         if (project::fps_limiting) {
+            // Sleep in short steps until the target frame time is reached (avoid busy-wait at 100% CPU)
             while (glfwGetTime() < lasttime + 1.0 / project::fps_max) {
+                std::this_thread::sleep_for(std::chrono::microseconds(200));
             }
             lasttime = glfwGetTime();
         }

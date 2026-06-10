@@ -29,6 +29,9 @@ namespace cgp_test {
 			c(0, 0) = 1; c(0, 1) = 0;
 			c(1, 0) = 2; c(1, 1) = 5;
 			assert_cgp_no_msg(is_equal(a + b, c));
+
+			// str(grid_2D) forwards to str(numarray)
+			assert_cgp_no_msg(str(a, ",", "[", "]") == "[1,3,2,4]");
 		}
 
 		{

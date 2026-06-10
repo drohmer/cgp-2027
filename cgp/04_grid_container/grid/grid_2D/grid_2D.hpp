@@ -345,7 +345,7 @@ template <typename T> std::ostream& operator<<(std::ostream& s, grid_2D<T> const
 }
 template <typename T> std::string str(grid_2D<T> const& v, std::string const& separator, std::string const& begin, std::string const& end)
 {
-    return to_string(v.data, separator, begin, end);
+    return str(v.data, separator, begin, end);
 }
 
 

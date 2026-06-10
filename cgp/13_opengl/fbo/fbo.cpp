@@ -110,6 +110,26 @@ namespace cgp{
 
 
 
+	void opengl_fbo_structure::clear() {
+		if (id != 0) {
+			glDeleteFramebuffers(1, &id); opengl_check;
+			id = 0;
+		}
+		if (depth_buffer_id != 0) {
+			glDeleteRenderbuffers(1, &depth_buffer_id); opengl_check;
+			depth_buffer_id = 0;
+		}
+		if (emscripten_color_attachment_id != 0) {
+			glDeleteTextures(1, &emscripten_color_attachment_id); opengl_check;
+			emscripten_color_attachment_id = 0;
+		}
+		if (texture.id != 0)
+			texture.clear();
+
+		width = 0;
+		height = 0;
+	}
+
 	void opengl_fbo_structure::update_screen_size(int new_width, int new_height) {
 
 		if (width != new_width || height != new_height) 
