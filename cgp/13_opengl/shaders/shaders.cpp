@@ -43,13 +43,17 @@ namespace cgp
 
     void opengl_shader_structure::load(std::string const& vertex_shader_path, std::string const& fragment_shader_path, bool adapt_opengles)
     {
-        clear(); // release any previously loaded program and its cached uniform locations
+        // Note: the previous program is NOT deleted here. opengl_shader_structure is copied by value
+        //  (ex. a mesh_drawable receives a copy of the shared default shader), deleting it would
+        //  destroy the program still used by the other drawables. Call clear() explicitly if needed.
         id = opengl_load_shader(vertex_shader_path, fragment_shader_path, adapt_opengles);
     }
 
     void opengl_shader_structure::load_from_inline_text(std::string const& vertex_shader_text, std::string const& fragment_shader_text, bool* load_shader_ok)
     {
-        clear(); // release any previously loaded program and its cached uniform locations
+        // Note: the previous program is NOT deleted here. opengl_shader_structure is copied by value
+        //  (ex. a mesh_drawable receives a copy of the shared default shader), deleting it would
+        //  destroy the program still used by the other drawables. Call clear() explicitly if needed.
 #ifndef __EMSCRIPTEN__
         id = opengl_load_shader_from_text(vertex_shader_text, fragment_shader_text, load_shader_ok);
 #else
