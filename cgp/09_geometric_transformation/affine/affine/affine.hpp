@@ -7,8 +7,10 @@ namespace cgp
 	struct affine_rts;
 	struct affine_rt;
 
-	// ( scaling * scaling_xyz * rotation | translation )
-	// (         0                        |      1      )
+	// ( rotation * scaling * diag(scaling_xyz) | translation )
+	// (                 0                      |      1      )
+	//  T * p = rotation * (scaling * scaling_xyz * p) + translation
+	//  scaling_xyz stretches the local axes of the shape, then the rotation is applied.
 	struct affine
 	{
 		rotation_transform rotation;
@@ -34,6 +36,11 @@ namespace cgp
 	vec3 operator*(affine const& T, vec3 const& p);
 	vec4 operator*(affine const& T, vec4 const& p);
 
+	// Exact composition: a rigid or similarity transform (parent) applied after an affine (child).
+	affine operator*(affine_rts const& T1, affine const& T2);
+	affine operator*(affine_rt const& T1, affine const& T2);
+	// An affine applied after a rigid or similarity transform is representable only if
+	//  T1.scaling_xyz is uniform (asserted). Use T1.matrix()*T2.matrix() otherwise.
 	affine operator*(affine const& T1, affine_rts const& T2);
 	affine operator*(affine const& T1, affine_rt const& T2);
 	
@@ -44,8 +51,8 @@ namespace cgp
 
 	// Note: no inverse(affine) is provided on purpose.
 	//  With a non-uniform scaling_xyz, the affine struct (which always applies the scaling
-	//  after the rotation, i.e. diag(s_xyz)*R) cannot exactly represent its own inverse
-	//  R^T*diag(1/s_xyz). Rather than returning a silently wrong result, the inverse is not
+	//  before the rotation, i.e. R*diag(s_xyz)) cannot exactly represent its own inverse
+	//  diag(1/s_xyz)*R^T. Rather than returning a silently wrong result, the inverse is not
 	//  offered: use affine_rt / affine_rts (whose inverse is always exact) when an inverse is needed.
 
 	std::string type_str(affine const& );

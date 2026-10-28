@@ -2,6 +2,7 @@
 
 #include "cgp/01_base/base.hpp"
 #include "cgp/03_files/files.hpp"
+#include <cctype>
 #include "third_party/lodepng/lodepng.h"
 #include "third_party/jpeg/jpge.h"
 #include "third_party/jpeg/jpgd.h"
@@ -165,19 +166,16 @@ namespace cgp
 
     image_structure image_load_file(std::string const& filename)
     {
-        size_t const N = filename.size();
-        if (N > 4) {
-            std::string const ext_4 = filename.substr(N - 4, 4);
-            if (ext_4 == ".png")
-                return image_load_png(filename);
-            else if (ext_4 == ".jpg" || ext_4 == ".JPG")
-                return image_load_jpg(filename);
-        }
-        if (N > 5) {
-            std::string const ext_5 = filename.substr(N - 5, 5);
-            if (ext_5 == ".jpeg")
-                return image_load_jpg(filename);
-        }
+        // extension in any case: .png, .PNG, .jpg, .JPG, .jpeg, .JPEG ...
+        std::string ext;
+        size_t const dot = filename.find_last_of('.');
+        if (dot != std::string::npos)
+            for (char c : filename.substr(dot))
+                ext += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+        if (ext == ".png")
+            return image_load_png(filename);
+        if (ext == ".jpg" || ext == ".jpeg")
+            return image_load_jpg(filename);
 
         error_cgp("Error image_load_file(" + filename + "), could not detect a valid extension while expecting .jpg or .png file\n");
         

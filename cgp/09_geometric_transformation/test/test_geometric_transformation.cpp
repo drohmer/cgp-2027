@@ -83,5 +83,47 @@ namespace cgp_test
 			assert_cgp_no_msg(is_equal(T*vec4{1,0,0,0}, vec4{1,0,0,0}));
 			assert_cgp_no_msg(is_equal(T*vec4{1,0,0,1}, vec4{2,2,3,1}));
 		}
+
+		// affine: scaling_xyz stretches the local axes of the shape, before the rotation
+		//  (p -> R * (scaling * scaling_xyz * p) + t), as T*R*S in most 3D tools.
+		{
+			auto const close = [](vec3 const& a, vec3 const& b) { return norm(a-b) < 1e-3f; };
+			affine const T(rotation_axis_angle({0,0,1}, Pi/2), vec3{1,0,0}, 1.0f, vec3{2,1,1});
+			// the local x axis is stretched by 2, then turned to y
+			assert_cgp_no_msg(close(T*vec3{1,0,0}, vec3{1,2,0}));
+			assert_cgp_no_msg(close(T*vec3{0,1,0}, vec3{0,0,0}));
+			// matrix() and operator* agree
+			vec3 const p{0.3f,-1.2f,2.0f};
+			vec4 const q = T.matrix()*vec4(p,1.0f);
+			assert_cgp_no_msg(close(q.xyz(), T*p));
+			assert_cgp_no_msg(close((T*vec4(p,1.0f)).xyz(), T*p));
+		}
+
+		// affine::from_matrix recovers a non-uniform scaling, and keeps scaling_xyz={1,1,1}
+		//  for a rigid or uniformly scaled matrix
+		{
+			auto const close = [](vec3 const& a, vec3 const& b) { return norm(a-b) < 1e-3f; };
+			affine const T(rotation_axis_angle(normalize(vec3{1,2,3}), 0.7f), vec3{1,2,3}, 1.5f, vec3{2,0.5f,1});
+			affine const A = affine::from_matrix(T.matrix());
+			vec3 const p{0.3f,-1.2f,2.0f};
+			assert_cgp_no_msg(close(A*p, T*p));
+
+			affine_rts const U(rotation_axis_angle({0,1,0}, 0.4f), vec3{0,1,0}, 2.0f);
+			affine const B = affine::from_matrix(U.matrix());
+			assert_cgp_no_msg(std::abs(B.scaling-2.0f) < 1e-4f);
+			assert_cgp_no_msg(close(B.scaling_xyz, vec3{1,1,1}));
+			assert_cgp_no_msg(close(B*p, U*p));
+		}
+
+		// a rigid or similarity transform composed with an affine (parent * child) is exact
+		{
+			auto const close = [](vec3 const& a, vec3 const& b) { return norm(a-b) < 1e-3f; };
+			affine const child(rotation_axis_angle({1,0,0}, 0.5f), vec3{0,1,0}, 1.0f, vec3{3,1,0.5f});
+			affine_rts const parent(rotation_axis_angle({0,0,1}, 1.1f), vec3{2,0,0}, 0.5f);
+			affine_rt const rigid(rotation_axis_angle({0,1,0}, -0.3f), vec3{0,0,1});
+			vec3 const p{0.3f,-1.2f,2.0f};
+			assert_cgp_no_msg(close((parent*child)*p, parent*(child*p)));
+			assert_cgp_no_msg(close((rigid*child)*p, rigid*(child*p)));
+		}
 	}
 }

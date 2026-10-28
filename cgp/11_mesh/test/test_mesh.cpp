@@ -71,6 +71,20 @@ namespace cgp_test
 
 			assert_cgp_no_msg(is_equal(m.normal[0], normalize(vec3{ 2,1,0 })));
 		}
+		// With a rotation: scaling_xyz acts on the local axes, before the rotation, so the
+		//  normal is normalize( R * diag(1,1/2,1) * n0 ) and stays orthogonal to the
+		//  transformed tangent T*t - T*0 with t = {1,-1,0} orthogonal to n0.
+		{
+			mesh m;
+			m.position = { {0,0,0}, {1,-1,0} };
+			m.normal = { normalize(vec3{ 1,1,0 }), normalize(vec3{ 1,1,0 }) };
+
+			affine const M(rotation_axis_angle({ 0,0,1 }, 0.7f), vec3{ 0,0,0 }, 1.0f, vec3{ 1,2,1 });
+			m.apply_transform(M);
+
+			vec3 const tangent = m.position[1] - m.position[0];
+			assert_cgp_no_msg(std::abs(dot(tangent, m.normal[0])) < 1e-4f);
+		}
 
 		// ---------- closed cylinder / cone caps face outward ----------
 		// Axis along +z. Side normals have z=0; the top cap faces +z; the bottom cap (resp.

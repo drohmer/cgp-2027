@@ -26,9 +26,9 @@ namespace cgp
 		float const sy = scaling_xyz.y * scaling;
 		float const sz = scaling_xyz.z * scaling;
 		return mat4{ 
-			sx * get<0,0>(R), sx * get<0,1>(R)  , sx * get<0,2>(R), translation.x,
-			sy * get<1,0>(R), sy * get<1,1>(R)  , sy * get<1,2>(R), translation.y,
-			sz * get<2,0>(R), sz * get<2,1>(R)  , sz * get<2,2>(R), translation.z,
+			get<0,0>(R) * sx, get<0,1>(R) * sy, get<0,2>(R) * sz, translation.x,
+			get<1,0>(R) * sx, get<1,1>(R) * sy, get<1,2>(R) * sz, translation.y,
+			get<2,0>(R) * sx, get<2,1>(R) * sy, get<2,2>(R) * sz, translation.z,
 			0.0f  ,  0.0f ,  0.0f ,    1.0f     
 		};
 		
@@ -36,35 +36,40 @@ namespace cgp
 
 	vec3 operator*(affine const& T, vec3 const& p)
 	{
-		mat3 const R = T.rotation.matrix();
-		
-		return vec3{
-			T.scaling_xyz.x* T.scaling* (get<0,0>(R)*p.x + get<0,1>(R)*p.y + get<0,2>(R)*p.z) + T.translation.x,
-			T.scaling_xyz.y* T.scaling* (get<1,0>(R)*p.x + get<1,1>(R)*p.y + get<1,2>(R)*p.z) + T.translation.y,
-			T.scaling_xyz.z* T.scaling* (get<2,0>(R)*p.x + get<2,1>(R)*p.y + get<2,2>(R)*p.z) + T.translation.z
-		};
+		// scaling along the local axes first, then rotation and translation
+		return T.rotation * (T.scaling * T.scaling_xyz * p) + T.translation;
 	}
 	
 	vec4 operator*(affine const& T, vec4 const& p)
 	{
-		mat3 const R = T.rotation.matrix();
-
-		return vec4{
-			T.scaling_xyz.x * T.scaling * (get<0,0>(R) * p.x + get<0,1>(R) * p.y + get<0,2>(R) * p.z) + T.translation.x * p.w,
-			T.scaling_xyz.y * T.scaling * (get<1,0>(R) * p.x + get<1,1>(R) * p.y + get<1,2>(R) * p.z) + T.translation.y * p.w,
-			T.scaling_xyz.z * T.scaling * (get<2,0>(R) * p.x + get<2,1>(R) * p.y + get<2,2>(R) * p.z) + T.translation.z * p.w,
-			p.w
-		};
+		vec3 const q = T.rotation * (T.scaling * T.scaling_xyz * p.xyz()) + T.translation * p.w;
+		return vec4{ q.x, q.y, q.z, p.w };
 	}
 
 
+	affine operator*(affine_rts const& T1, affine const& T2)
+	{
+		return affine(T1.rotation * T2.rotation, T1 * T2.translation, T1.scaling * T2.scaling, T2.scaling_xyz);
+	}
+	affine operator*(affine_rt const& T1, affine const& T2)
+	{
+		return affine(T1.rotation * T2.rotation, T1 * T2.translation, T2.scaling, T2.scaling_xyz);
+	}
+
+	static bool is_uniform(vec3 const& s)
+	{
+		float const m = std::max(std::abs(s.x), std::max(std::abs(s.y), std::abs(s.z)));
+		return std::abs(s.x - s.y) <= 1e-5f * m && std::abs(s.x - s.z) <= 1e-5f * m;
+	}
 	affine operator*(affine const& T1, affine_rts const& T2)
 	{
-		return affine(T1.rotation * T2.rotation, T1 * T2.translation, T1.scaling * T2.scaling, T1.scaling_xyz);
+		assert_cgp(is_uniform(T1.scaling_xyz), "affine * affine_rts needs a uniform T1.scaling_xyz (the result would not be an affine): use T1.matrix()*T2.matrix()");
+		float const s = T1.scaling * T1.scaling_xyz.x;
+		return affine(T1.rotation * T2.rotation, T1 * T2.translation, s * T2.scaling, vec3{ 1,1,1 });
 	}
 	affine operator*(affine const& T1, affine_rt const& T2)
 	{
-		return affine(T1.rotation * T2.rotation, T1 * T2.translation, T1.scaling, T1.scaling_xyz);
+		return T1 * affine_rts(T2);
 	}
 
 
@@ -84,15 +89,28 @@ namespace cgp
 
 	affine affine::from_matrix(mat4 const& M)
 	{
+		// The linear block is rotation * scaling * diag(scaling_xyz): column j has the norm
+		//  scaling * scaling_xyz[j]. A uniform scaling goes to `scaling` (scaling_xyz stays {1,1,1}).
 		affine a;
-
-		a.scaling = std::sqrt(M.data.x.x*M.data.x.x + M.data.x.y*M.data.x.y + M.data.x.z*M.data.x.z);
-		if(a.scaling>1e-5f){
-			mat3 R = M.get_block_linear()/a.scaling;
-			a.rotation = rotation_transform::from_matrix(R);
-		}
 		a.translation = M.get_block_translation();
 
+		mat3 L = M.get_block_linear();
+		vec3 s;
+		for (int j = 0; j < 3; ++j)
+			s[j] = std::sqrt(L(0, j) * L(0, j) + L(1, j) * L(1, j) + L(2, j) * L(2, j));
+		if (s.x < 1e-5f || s.y < 1e-5f || s.z < 1e-5f)
+			return a; // degenerate: keep the identity rotation
+		if (det(L) < 0)
+			s.x = -s.x; // reflection: carried by scaling_xyz.x
+		for (int i = 0; i < 3; ++i)
+			for (int j = 0; j < 3; ++j)
+				L(i, j) /= s[j];
+		a.rotation = rotation_transform::from_matrix(L);
+
+		if (is_uniform(s))
+			a.scaling = s.x;
+		else
+			a.scaling_xyz = s;
 		return a;
 	}
 
