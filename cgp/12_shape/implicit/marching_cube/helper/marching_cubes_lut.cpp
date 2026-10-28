@@ -3,6 +3,10 @@
 namespace cgp {
 
 	
+	std::array<int3, 8> marching_cube_lut_offset_cube() {
+		return {{ {0,0,0}, {1,0,0}, {1,1,0}, {0,1,0}, {0,0,1}, {1,0,1}, {1,1,1}, {0,1,1} }};
+	}
+
 	std::array<std::pair<int, int>, 12> marching_cube_lut_edge_order() {
 		return {{ {0, 1}, { 1,2 }, { 2,3 }, { 3,0 }, { 4,5 }, { 5,6 }, { 6,7 }, { 7,4 }, { 0,4 }, { 1,5 }, { 2,6 }, { 3,7 } }};
 	}

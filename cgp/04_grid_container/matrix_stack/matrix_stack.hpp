@@ -519,11 +519,6 @@ namespace cgp
         a.data += b.data;
         return a;
     }
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2>& operator+=(matrix_stack<T, N1, N2>& a, T const& b)
-    {
-        a.data += b;
-        return a;
-    }
     template <typename T, int N1, int N2> matrix_stack<T, N1, N2>  operator+(matrix_stack<T, N1, N2> const& a, matrix_stack<T, N1, N2> const& b)
     {
         matrix_stack<T, N1, N2> res;
@@ -531,19 +526,6 @@ namespace cgp
         return res;
 
     }
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2> operator+(matrix_stack<T, N1, N2> const& a, T const& b)
-    {
-        matrix_stack<T, N1, N2> res;
-        res.data = a.data + b;
-        return res;
-    }
-    template <typename T, int N1, int N2> matrix_stack<T, N1, N2>  operator+(T const& a, matrix_stack<T, N1, N2> const& b)
-    {
-        matrix_stack<T, N1, N2> res;
-        res.data = a + b.data;
-        return res;
-    }
-
     template <typename T, int N1, int N2> matrix_stack<T, N1, N2>& operator-=(matrix_stack<T, N1, N2>& a, matrix_stack<T, N1, N2> const& b)
     {
         a.data -= b.data;

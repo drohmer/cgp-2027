@@ -74,5 +74,14 @@ namespace cgp_test
 			assert_cgp_no_msg(is_equal(T*(Ti*p), p));
 			assert_cgp_no_msg(type_str(Ti) == "affine_rts");
 		}
+
+		// affine * vec4: the translation is weighted by w (a direction, w=0, is not translated),
+		//  as for affine_rt and affine_rts.
+		{
+			affine T;
+			T.translation = vec3{1,2,3};
+			assert_cgp_no_msg(is_equal(T*vec4{1,0,0,0}, vec4{1,0,0,0}));
+			assert_cgp_no_msg(is_equal(T*vec4{1,0,0,1}, vec4{2,2,3,1}));
+		}
 	}
 }

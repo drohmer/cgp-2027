@@ -94,7 +94,8 @@ namespace cgp
 
 		// Prepare for draw call
 		// ********************************** //
-		int const N_points_display = N_points < 0 ? drawable.vbo_position.size : N_points;
+		int const N_vbo = int(drawable.vbo_position.size);
+		int const N_points_display = (N_points < 0 || N_points > N_vbo) ? N_vbo : N_points;
 		glBindVertexArray(drawable.vao); opengl_check;
 		if (drawable.display_type == curve_drawable_display_type::Curve) {
 			glDrawArrays(GL_LINE_STRIP, 0, N_points_display); opengl_check;

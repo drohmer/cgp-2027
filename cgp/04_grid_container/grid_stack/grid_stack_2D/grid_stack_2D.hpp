@@ -80,19 +80,14 @@ template <typename T, int N1, int N2> std::string str(grid_stack_2D<T, N1, N2> c
 template <typename Ta, typename Tb, int Na1, int Na2, int Nb1, int Nb2> bool is_equal(grid_stack_2D<Ta,Na1,Na2> const& a, grid_stack_2D<Tb,Nb1,Nb2> const& b);
 
 /** Math operators
- * Common mathematical operations between buffers, and scalar or element values. */
+ * Common mathematical operations between buffers, and scalar or element values.
+ * Note: as for numarray_stack, adding or subtracting a scalar is not provided (only scaling). */
 template <typename T, int N1, int N2> grid_stack_2D<T,N1,N2>& operator+=(grid_stack_2D<T, N1, N2>& a, grid_stack_2D<T,N1,N2> const& b);
 
-template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>& operator+=(grid_stack_2D<T, N1, N2>& a, T const& b);
 template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>  operator+(grid_stack_2D<T, N1, N2> const& a, grid_stack_2D<T,N1,N2> const& b);
-template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>  operator+(grid_stack_2D<T, N1, N2> const& a, T const& b);
-template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>  operator+(T const& a, grid_stack_2D<T, N1, N2> const& b);
 
 template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>& operator-=(grid_stack_2D<T, N1, N2>& a, grid_stack_2D<T,N1,N2> const& b);
-template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>& operator-=(grid_stack_2D<T, N1, N2>& a, T const& b);
 template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>  operator-(grid_stack_2D<T, N1, N2> const& a, grid_stack_2D<T, N1, N2> const& b);
-template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>  operator-(grid_stack_2D<T, N1, N2> const& a, T const& b);
-template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>  operator-(T const& a, grid_stack_2D<T, N1, N2> const& b);
 
 template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>& operator*=(grid_stack_2D<T, N1, N2>& a, grid_stack_2D<T, N1, N2> const& b);
 template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>& operator*=(grid_stack_2D<T, N1, N2>& a, float b);
@@ -315,11 +310,6 @@ template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>& operator+=(grid_
     a.data += b.data;
     return a;
 }
-template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>& operator+=(grid_stack_2D<T, N1, N2>& a, T const& b)
-{
-    a.data += b;
-    return a;
-}
 template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>  operator+(grid_stack_2D<T, N1, N2> const& a, grid_stack_2D<T, N1, N2> const& b)
 {
     grid_stack_2D<T, N1, N2> res;
@@ -327,27 +317,9 @@ template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>  operator+(grid_s
     return res;
 
 }
-template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2> operator+(grid_stack_2D<T, N1, N2> const& a, T const& b)
-{
-    grid_stack_2D<T, N1, N2> res;
-    res.data = a.data+b;
-    return res;
-}
-template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>  operator+(T const& a, grid_stack_2D<T, N1, N2> const& b)
-{
-    grid_stack_2D<T, N1, N2> res;
-    res.data = a + b.data;
-    return res;
-}
-
 template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>& operator-=(grid_stack_2D<T, N1, N2>& a, grid_stack_2D<T, N1, N2> const& b)
 {
     a.data -= b.data;
-    return a;
-}
-template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>& operator-=(grid_stack_2D<T, N1, N2>& a, T const& b)
-{
-    a.data -= b;
     return a;
 }
 template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>  operator-(grid_stack_2D<T, N1, N2> const& a, grid_stack_2D<T, N1, N2> const& b)
@@ -356,19 +328,6 @@ template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>  operator-(grid_s
     res.data = a.data-b.data;
     return res;
 }
-template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2> operator-(grid_stack_2D<T, N1, N2> const& a, T const& b)
-{
-    grid_stack_2D<T, N1, N2> res;
-    res.data = a.data-b;
-    return res;
-}
-template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>  operator-(T const& a, grid_stack_2D<T, N1, N2> const& b)
-{
-    grid_stack_2D<T, N1, N2> res;
-    res.data = a-b.data;
-    return res;
-}
-
 template <typename T, int N1, int N2> grid_stack_2D<T, N1, N2>& operator*=(grid_stack_2D<T, N1, N2>& a, grid_stack_2D<T, N1, N2> const& b)
 {
     a.data *= b.data;

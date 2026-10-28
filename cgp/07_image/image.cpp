@@ -158,7 +158,7 @@ namespace cgp
 
     void image_save_jpg(std::string const& filename, image_structure const& im)
     {
-        bool res = jpge::compress_image_to_jpeg_file( filename.c_str(), im.width, im.height, 3, ptr(im.data));
+        bool res = jpge::compress_image_to_jpeg_file( filename.c_str(), im.width, im.height, im.color_type == image_color_type::rgba ? 4 : 3, ptr(im.data));
         assert_cgp(res == 1, "Failed to save jpg image " + filename);
     }
 

@@ -22,18 +22,18 @@ bool is_equal(T1 const& a, T2 const& b) { return a==b; }
 
 
 // Uniform size() function (number of elements) for all types - return 1 for fundamental types
-constexpr size_t size(float a);
-constexpr size_t size(double a);
-constexpr size_t size(char a);
-constexpr size_t size(short a);
-constexpr size_t size(int a);
-constexpr size_t size(long a);
-constexpr size_t size(long long a);
-constexpr size_t size(unsigned char a);
-constexpr size_t size(unsigned short a);
-constexpr size_t size(unsigned int a);
-constexpr size_t size(unsigned long a);
-constexpr size_t size(unsigned long long a);
+constexpr size_t size(float)              { return 1; }
+constexpr size_t size(double)             { return 1; }
+constexpr size_t size(char)               { return 1; }
+constexpr size_t size(short)              { return 1; }
+constexpr size_t size(int)                { return 1; }
+constexpr size_t size(long)               { return 1; }
+constexpr size_t size(long long)          { return 1; }
+constexpr size_t size(unsigned char)      { return 1; }
+constexpr size_t size(unsigned short)     { return 1; }
+constexpr size_t size(unsigned int)       { return 1; }
+constexpr size_t size(unsigned long)      { return 1; }
+constexpr size_t size(unsigned long long) { return 1; }
 
 // Size took in memory for the variable (in Byte)
 size_t size_in_memory(float a);
@@ -57,11 +57,11 @@ short         abs(short a);
 int           abs(int a);
 long          abs(long a);
 long long     abs(long long a);
-constexpr unsigned char  abs(unsigned char a);
-constexpr unsigned short abs(unsigned short a);
-constexpr unsigned int   abs(unsigned int a);
-constexpr unsigned long  abs(unsigned long a);
-constexpr unsigned long long  abs(unsigned long long a);
+constexpr unsigned char  abs(unsigned char a) { return a; }
+constexpr unsigned short abs(unsigned short a) { return a; }
+constexpr unsigned int   abs(unsigned int a) { return a; }
+constexpr unsigned long  abs(unsigned long a) { return a; }
+constexpr unsigned long long  abs(unsigned long long a) { return a; }
 
 // Pointer access
 float const*          ptr(float const& a);

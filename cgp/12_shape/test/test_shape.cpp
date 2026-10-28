@@ -5,6 +5,7 @@
 #include "cgp/12_shape/bounding_box/bounding_box.hpp"
 #include "cgp/12_shape/spatial_domain/spatial_domain_grid_3D/spatial_domain_grid_3D.hpp"
 #include "cgp/12_shape/implicit/marching_cube/marching_cube.hpp"
+#include "cgp/12_shape/implicit/marching_cube/helper/marching_cubes_lut.hpp"
 
 #include <cmath>
 
@@ -96,6 +97,17 @@ namespace cgp_test
 			for (int i = 0; i < V; ++i)
 				for (int j = i + 1; j < V; ++j)
 					assert_cgp_no_msg(is_equal(m.position[i], m.position[j]) == false);
+		}
+
+		// marching_cube_lut_offset_cube is defined (it was only declared), and its corners
+		//  match marching_cube_lut_edge_order: each edge joins two corners that differ
+		//  along exactly one axis.
+		{
+			std::array<int3, 8> const corner = marching_cube_lut_offset_cube();
+			for (auto const& e : marching_cube_lut_edge_order()) {
+				int3 const d = corner[e.second] - corner[e.first];
+				assert_cgp_no_msg(std::abs(d.x) + std::abs(d.y) + std::abs(d.z) == 1);
+			}
 		}
 	}
 }

@@ -103,7 +103,6 @@ template <typename T> grid_3D<T>& operator/=(grid_3D<T>& a, grid_3D<T> const& b)
 template <typename T> grid_3D<T>& operator/=(grid_3D<T>& a, float b);
 template <typename T> grid_3D<T>  operator/(grid_3D<T> const& a, grid_3D<T> const& b);
 template <typename T> grid_3D<T>  operator/(grid_3D<T> const& a, float b);
-template <typename T> grid_3D<T>  operator/(float a, grid_3D<T> const& b);
 
 }
 
@@ -453,13 +452,6 @@ template <typename T> grid_3D<T>  operator/(grid_3D<T> const& a, float b)
     res.data = a.data/b;
     return res;
 }
-template <typename T> grid_3D<T>  operator/(float a, grid_3D<T> const& b)
-{
-    grid_3D<T> res(b.dimension);
-    res.data = a/b.data;
-    return res;
-}
-
 
 
 

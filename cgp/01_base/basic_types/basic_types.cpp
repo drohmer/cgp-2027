@@ -27,18 +27,6 @@ bool is_equal(double a, float b)
 
 
 
-constexpr size_t size(float )          { return 1; }
-constexpr size_t size(double )         { return 1; }
-constexpr size_t size(char )           { return 1; }
-constexpr size_t size(short )          { return 1; }
-constexpr size_t size(int )            { return 1; }
-constexpr size_t size(long )           { return 1; }
-constexpr size_t size(long long)       { return 1; }
-constexpr size_t size(unsigned char )  { return 1; }
-constexpr size_t size(unsigned short ) { return 1; }
-constexpr size_t size(unsigned int )   { return 1; }
-constexpr size_t size(unsigned long )  { return 1; }
-constexpr size_t size(unsigned long long) { return 1; }
 
 
 size_t size_in_memory(float a)          { return sizeof(a); }
@@ -62,11 +50,6 @@ short         abs(short a)  { return a > 0 ? a : -a; }
 int           abs(int a)    { return a > 0 ? a : -a; }
 long          abs(long a)   { return a > 0 ? a : -a; }
 long long     abs(long long a) { return a > 0 ? a : -a; }
-constexpr unsigned char  abs(unsigned char a)  { return a; }
-constexpr unsigned short abs(unsigned short a) { return a; }
-constexpr unsigned int   abs(unsigned int a)   { return a; }
-constexpr unsigned long  abs(unsigned long a)  { return a; }
-constexpr unsigned long long  abs(unsigned long long a) { return a; }
 
 
 float const* ptr(float const& a)                   { return &a; }

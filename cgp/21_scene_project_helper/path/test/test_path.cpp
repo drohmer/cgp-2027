@@ -1,7 +1,9 @@
 #include "test_path.hpp"
 
 #include "cgp/01_base/base.hpp"
+#include "cgp/21_scene_project_helper/path/path.hpp"
 
+#include <filesystem>
 #include <string>
 
 namespace cgp
@@ -63,6 +65,27 @@ namespace cgp_test
 			split_executable_path("build/renderer.exe", dir, name);
 			assert_cgp_no_msg(dir == "build/");
 			assert_cgp_no_msg(name == "renderer");
+		}
+
+		// ---------- project_path_find: <exe_dir>/../<exe_name>/shaders/ ----------
+		// Executable in <root>/bin/, resources in <root>/project/shaders/, current directory
+		//  5 levels below <root>/w (out of reach of the cwd-relative candidates "../" x4):
+		//  only the candidate executable_dir + "../" + executable_name + "/" matches.
+		{
+			namespace fs = std::filesystem;
+			fs::path const root = fs::temp_directory_path() / "cgp_test_project_path_find";
+			fs::remove_all(root);
+			fs::create_directories(root / "bin");
+			fs::create_directories(root / "project" / "shaders");
+			fs::create_directories(root / "w" / "a" / "b" / "c" / "d");
+			fs::path const cwd = fs::current_path();
+			fs::current_path(root / "w" / "a" / "b" / "c" / "d");
+
+			std::string const found = project_path_find((root / "bin" / "project").string(), "shaders/");
+			assert_cgp_no_msg(fs::equivalent(found, root / "project"));
+
+			fs::current_path(cwd);
+			fs::remove_all(root);
 		}
 #endif
 	}

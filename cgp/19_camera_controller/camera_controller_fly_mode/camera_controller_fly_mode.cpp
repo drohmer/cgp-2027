@@ -58,7 +58,7 @@ std::string camera_controller_fly_mode::doc_usage() const
 	doc += "First person 'fly mode': Continuously move forward, while being able to rotate (pull up/down and roll).\n";
 	doc += "Control: \n";
 	doc += "   - Mouse left click + drag: Pull up/down, roll right/left.\n";
-	doc += "   - Key arrows or WASD/ZQSD for translating forward/backward/left/right.\n";
+	doc += "   - Key arrows or WASD/ZQSD: up/down to pull up/down, left/right to roll.\n";
 	doc += "   - Key +/- or R/F for speeding up/down.\n";
 	doc += "   - Press \"Shift+C\" (Maj C)  to enter Mouse-Captured Mode: Enables infinite mouse tracking (quit the mode with \"Shift+C\" again or Esc).";
 

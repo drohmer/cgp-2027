@@ -50,9 +50,9 @@ namespace cgp
 		mat3 const R = T.rotation.matrix();
 
 		return vec4{
-			T.scaling_xyz.x * T.scaling * (get<0,0>(R) * p.x + get<0,1>(R) * p.y + get<0,2>(R) * p.z) + T.translation.x,
-			T.scaling_xyz.y * T.scaling * (get<1,0>(R) * p.x + get<1,1>(R) * p.y + get<1,2>(R) * p.z) + T.translation.y,
-			T.scaling_xyz.z * T.scaling * (get<2,0>(R) * p.x + get<2,1>(R) * p.y + get<2,2>(R) * p.z) + T.translation.z,
+			T.scaling_xyz.x * T.scaling * (get<0,0>(R) * p.x + get<0,1>(R) * p.y + get<0,2>(R) * p.z) + T.translation.x * p.w,
+			T.scaling_xyz.y * T.scaling * (get<1,0>(R) * p.x + get<1,1>(R) * p.y + get<1,2>(R) * p.z) + T.translation.y * p.w,
+			T.scaling_xyz.z * T.scaling * (get<2,0>(R) * p.x + get<2,1>(R) * p.y + get<2,2>(R) * p.z) + T.translation.z * p.w,
 			p.w
 		};
 	}

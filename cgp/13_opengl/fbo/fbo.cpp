@@ -21,8 +21,11 @@ namespace cgp{
 
 	void opengl_fbo_structure::initialize() {
 
-		width = 800;
-		height = 800;
+		// Default size, unless a size was set before the call (e.g. a shadow map)
+		if (width <= 0 || height <= 0) {
+			width = 800;
+			height = 800;
+		}
 
 		if(mode == opengl_fbo_mode::image) {
 
@@ -136,6 +139,8 @@ namespace cgp{
 		{
 			width = new_width;
 			height = new_height;
+			texture.width = width;
+			texture.height = height;
 
 			if(mode==opengl_fbo_mode::image){
 				glBindTexture(GL_TEXTURE_2D, texture.id);
@@ -151,6 +156,11 @@ namespace cgp{
 				glBindTexture(GL_TEXTURE_2D, texture.id);
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
 				glBindTexture(GL_TEXTURE_2D, 0);
+				#ifdef __EMSCRIPTEN__
+				glBindTexture(GL_TEXTURE_2D, emscripten_color_attachment_id);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+				glBindTexture(GL_TEXTURE_2D, 0);
+				#endif
 				opengl_check;
 			}
 

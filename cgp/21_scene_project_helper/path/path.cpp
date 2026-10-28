@@ -12,7 +12,7 @@ namespace cgp {
 		// All the possible path attempts (from the current directory) to reach the root direction
 		std::vector<std::string> attempt_root = { "", "../", "../../", "../../../", "../../../../",
 			executable_name + "/", "../" + executable_name + "/", "../../" + executable_name + "/", "../../../" + executable_name + "/", "../../../../" + executable_name + "/",
-			executable_dir,executable_dir + "../",executable_dir + "../" + executable_name,executable_dir + "../../",executable_dir + "../../../"
+			executable_dir,executable_dir + "../",executable_dir + "../" + executable_name + "/",executable_dir + "../../",executable_dir + "../../../"
 		};
 
 		success = false;
