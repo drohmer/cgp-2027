@@ -138,7 +138,15 @@ namespace cgp
     static GLFWvidmode const* primary_video_mode()
     {
         GLFWmonitor* const primary = glfwGetPrimaryMonitor();
-        GLFWvidmode const* const mode = (primary != nullptr) ? glfwGetVideoMode(primary) : nullptr;
+        GLFWvidmode const* mode = (primary != nullptr) ? glfwGetVideoMode(primary) : nullptr;
+        if (mode == nullptr && primary != nullptr) {
+            // Emscripten does not implement glfwGetVideoMode (always null): use the work area
+            //  of the monitor (the screen of the browser) instead
+            static GLFWvidmode fallback = {};
+            int x = 0, y = 0;
+            glfwGetMonitorWorkarea(primary, &x, &y, &fallback.width, &fallback.height);
+            mode = &fallback;
+        }
         if (mode == nullptr) {
             std::string s = "\nError: No monitor found (glfwGetPrimaryMonitor).\n";
             s += "The program needs access to a display: run it from a graphical session (not over SSH without display forwarding).\n";
