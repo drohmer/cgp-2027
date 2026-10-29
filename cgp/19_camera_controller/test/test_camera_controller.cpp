@@ -94,5 +94,25 @@ namespace cgp_test
 		}
 
 
+
+		// fly mode: holding R for one second gives the same speed at 60 and at 144 fps
+		{
+			auto speed_after_one_second = [](int fps) {
+				cgp::input_devices inputs;
+				cgp::window_structure window;
+				cgp::camera_controller_fly_mode controller;
+				controller.inputs = &inputs;
+				controller.window = &window;
+				inputs.keyboard.update_from_glfw_key(GLFW_KEY_R, GLFW_PRESS);
+				inputs.time_interval = 1.0f / fps;
+				for (int k = 0; k < fps; ++k)
+					controller.idle_frame();
+				return controller.speed;
+			};
+			float const s60 = speed_after_one_second(60);
+			float const s144 = speed_after_one_second(144);
+			assert_cgp_no_msg(std::abs(s60 - 0.05f * std::pow(1.02f, 60.0f)) < 1e-4f); // unchanged at 60 fps
+			assert_cgp_no_msg(std::abs(s144 - s60) < 1e-4f);
+		}
 	}
 }

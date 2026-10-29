@@ -1,5 +1,7 @@
 #include "camera_controller_fly_mode.hpp"
 
+#include <cmath>
+
 namespace cgp
 {
 
@@ -43,10 +45,13 @@ void camera_controller_fly_mode::idle_frame()
 	if (inputs->keyboard.right || inputs->keyboard.is_pressed(GLFW_KEY_D))
 		camera_model.manipulator_rotate_roll_pitch_yaw(-roll * magnitude, 0.0, 0.0f);
 
+	// speed_increase is the factor per frame at 60 fps: raised to the power 60*dt, the speed
+	//  changes at the same rate whatever the frame rate
+	float const speed_factor = std::pow(speed_increase, 60.0f * magnitude);
 	if (inputs->keyboard.is_pressed(GLFW_KEY_KP_ADD) || inputs->keyboard.is_pressed(GLFW_KEY_R))
-		speed = std::min(speed * speed_increase, speed_max);
+		speed = std::min(speed * speed_factor, speed_max);
 	if (inputs->keyboard.is_pressed(GLFW_KEY_KP_SUBTRACT) || inputs->keyboard.is_pressed(GLFW_KEY_F))
-		speed = std::max(speed / speed_increase, speed_min);
+		speed = std::max(speed / speed_factor, speed_min);
 
 	camera_model.manipulator_translate_front(speed * magnitude);
 
