@@ -292,9 +292,13 @@ namespace cgp
 			p = M*p;
 		// Normals transform by the inverse-transpose of the linear part.
 		//  The linear part is scaling*R*diag(scaling_xyz), so the normal map reduces to
-		//  normalize( R * diag(1/scaling_xyz) * n ) (the uniform scaling cancels under normalization).
+		//  normalize( sign(scaling) * R * diag(1/scaling_xyz) * n ).
+		float const sign = M.scaling < 0 ? -1.0f : 1.0f;
 		for(vec3& n : normal)
-			n = normalize(M.rotation * vec3{n.x/M.scaling_xyz.x, n.y/M.scaling_xyz.y, n.z/M.scaling_xyz.z});
+			n = normalize(sign * (M.rotation * vec3{n.x/M.scaling_xyz.x, n.y/M.scaling_xyz.y, n.z/M.scaling_xyz.z}));
+		// A reflection (negative determinant) reverses the face orientation
+		if (M.scaling * M.scaling_xyz.x * M.scaling_xyz.y * M.scaling_xyz.z < 0)
+			flip_connectivity();
 		return *this;
 	}
 	mesh& mesh::apply_transform(cgp::affine_rt const& M) {
@@ -309,9 +313,13 @@ namespace cgp
 	{
 		for (vec3& p : position)
 			p = M*p;
+		// A negative scaling is a point inversion: the normals and the winding are flipped
+		float const sign = M.scaling < 0 ? -1.0f : 1.0f;
 		for(vec3& n : normal) {
-			n = M.rotation*n;
+			n = sign * (M.rotation*n);
 		}
+		if (M.scaling < 0)
+			flip_connectivity();
 		return *this;
 	}
 

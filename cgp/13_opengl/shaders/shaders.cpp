@@ -229,7 +229,7 @@ namespace cgp
             std::cout << "If this file exists, you may need to adapt the directory from where your program is executed \n" << std::endl;
         }
         if (check_file_exist(fragment_shader_path) == 0) {
-            std::cout << "Warning: Cannot read the fragment shader at location " << vertex_shader_path << std::endl;
+            std::cout << "Warning: Cannot read the fragment shader at location " << fragment_shader_path << std::endl;
             std::cout << "If this file exists, you may need to adapt the directory from where your program is executed \n" << std::endl;
         }
 

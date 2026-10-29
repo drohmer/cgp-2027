@@ -167,11 +167,21 @@ namespace cgp
 
     void window_structure::set_full_screen()
     {
+        // remember the position and size of the window, restored by set_windowed_screen()
+        if (glfwGetWindowMonitor(glfw_window) == nullptr) {
+            glfwGetWindowPos(glfw_window, &x_pos, &y_pos);
+            glfwGetWindowSize(glfw_window, &windowed_width, &windowed_height);
+        }
         glfwSetWindowMonitor(glfw_window, monitor, 0, 0, screen_resolution_width, screen_resolution_height, GLFW_DONT_CARE);
+        is_full_screen = true;
     }
     void window_structure::set_windowed_screen()
     {
-        glfwSetWindowMonitor(glfw_window, nullptr, 100, 100, screen_resolution_width / 2, screen_resolution_height / 2, GLFW_DONT_CARE);
+        if (windowed_width > 0 && windowed_height > 0)
+            glfwSetWindowMonitor(glfw_window, nullptr, x_pos, y_pos, windowed_width, windowed_height, GLFW_DONT_CARE);
+        else
+            glfwSetWindowMonitor(glfw_window, nullptr, 100, 100, screen_resolution_width / 2, screen_resolution_height / 2, GLFW_DONT_CARE);
+        is_full_screen = false;
     }
 
     

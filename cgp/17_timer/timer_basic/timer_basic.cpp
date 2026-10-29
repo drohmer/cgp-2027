@@ -20,7 +20,7 @@ double timer_current_time() { return g_time_source(); }
 void   timer_set_time_source(double (*source)()) { g_time_source = source ? source : default_time_source; }
 
 timer_basic::timer_basic()
-	:t(0),scale(1.0f),running(true),time_previous(timer_current_time())
+	:t(0),scale(1.0f),running(true),time_previous(timer_current_time()),started(false)
 {}
 float timer_basic::update()
 {
@@ -28,6 +28,11 @@ float timer_basic::update()
         return 0.0f;
 
     const double time_current = timer_current_time();
+    if (!started) {
+        // First update: the time spent since the construction (loading the scene, ...) is not counted
+        started = true;
+        time_previous = time_current;
+    }
     const float dt = static_cast<float>(scale*(time_current-time_previous));
 
     time_previous = time_current;
@@ -38,6 +43,7 @@ float timer_basic::update()
 void timer_basic::start()
 {
     running = true;
+    started = true;
     time_previous = timer_current_time();
 }
 void timer_basic::stop()

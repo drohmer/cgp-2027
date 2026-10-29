@@ -4,12 +4,19 @@ namespace cgp
 {
 	trajectory_drawable::trajectory_drawable(size_t N_max_sample_arg)
 		:position_record(), visual(), N_max_sample(N_max_sample_arg), current_size(0)
-	{}
+	{
+		visual.color = { 1,0,0 };
+	}
 
 	void trajectory_drawable::clear()
 	{
+		// the color and the model of the visual are kept
+		vec3 const color = visual.color;
+		affine const model = visual.model;
 		position_record.clear();
 		visual.clear();
+		visual.color = color;
+		visual.model = model;
 		current_size = 0;
 	}
 	void trajectory_drawable::add(vec3 const& position)
@@ -20,8 +27,14 @@ namespace cgp
 			assert_cgp_no_msg(current_size == 0);
 			assert_cgp_no_msg(visual.vbo_position.id == 0);
 
+			assert_cgp(N_max_sample > 0, "trajectory_drawable needs N_max_sample > 0");
 			position_record.resize(N_max_sample);
+			// initialize_data_on_gpu resets the color and the model: keep the ones set before
+			vec3 const color = visual.color;
+			affine const model = visual.model;
 			visual.initialize_data_on_gpu(position_record);
+			visual.color = color;
+			visual.model = model;
 		}
 		assert_cgp_no_msg(position_record.size() == N_max_sample);
 

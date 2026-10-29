@@ -125,5 +125,16 @@ namespace cgp_test
 			assert_cgp_no_msg(is_equal(div(16.0f, b), cgp::numarray<float>{8.0f, 4.0f, 2.0f}));
 		}
 
+		// += and -= accept two empty arrays; numarray + scalar in both orders
+		{
+			cgp::numarray<float> a, b;
+			a += b;
+			a -= b;
+			assert_cgp_no_msg(a.size()==0);
+			cgp::numarray<float> const c = {1.0f, 2.0f};
+			assert_cgp_no_msg(is_equal(c + 1.0f, cgp::numarray<float>{2.0f, 3.0f}));
+			assert_cgp_no_msg(is_equal(1.0f + c, cgp::numarray<float>{2.0f, 3.0f}));
+		}
+
 	}
 }

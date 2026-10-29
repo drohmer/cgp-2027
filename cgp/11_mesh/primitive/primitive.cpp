@@ -400,7 +400,7 @@ namespace cgp
 
 	mesh mesh_primitive_cubic_grid(vec3 const& p000, vec3 const& p100, vec3 const& p110, vec3 const& p010, vec3 const& p001, vec3 const& p101, vec3 const& p111, vec3 const& p011, int Nx, int Ny, int Nz)
 	{
-		assert_cgp(Nx>=2 && Ny>=2 && Nz>=2, "Nx, Ny, Nz must be > 2");
+		assert_cgp(Nx>=2 && Ny>=2 && Nz>=2, "Nx, Ny, Nz must be >= 2");
 
 
 		mesh shape;
@@ -425,12 +425,12 @@ namespace cgp
 	}
 
 
-	mesh mesh_primitive_arrow(vec3 const& p0, vec3 const& p1, float cylinder_radius, float cone_length_scale, float cone_radius_scale, int N)
+	mesh mesh_primitive_arrow(vec3 const& p0, vec3 const& p1, float cylinder_radius, float cone_height_scale, float cone_radius_scale, int N)
 	{
 		assert_cgp(N>2, "Arrow sample must be >2");
 
 		float const cone_radius = cone_radius_scale * cylinder_radius;
-		float const cone_length = cone_length_scale * cylinder_radius;
+		float const cone_length = cone_height_scale * cylinder_radius;
 
 		assert_cgp(cone_length<norm(p1-p0), "Too short arrow - length of cone > length of array");
 		vec3 const u = normalize(p1-p0);

@@ -44,7 +44,7 @@ namespace cgp
         explicit matrix_stack(matrix_stack<T, N1_arg, N2_arg> const& M);
 
         matrix_stack(std::initializer_list<T> const& arg);
-        matrix_stack(std::initializer_list<numarray_stack<T,N1> > const& arg);
+        matrix_stack(std::initializer_list<numarray_stack<T,N2> > const& arg); // N1 rows of size N2
 
         static matrix_stack<T, N1, N2> build_identity();
         static matrix_stack<T, N1, N2> diagonal(numarray_stack<T, std::min(N1,N2)> const& arg);
@@ -58,7 +58,7 @@ namespace cgp
 
 
         /** Element access
-         * Bound checking is performed unless cgp_NO_DEBUG is defined. */
+         * Bound checking is performed unless CGP_NO_DEBUG is defined. */
         numarray_stack<T, N2> const& operator[](int k1) const;
         numarray_stack<T, N2>& operator[](int k1);
 
@@ -267,7 +267,7 @@ namespace cgp
     }
 
     template <typename T, int N1, int N2>
-    matrix_stack<T, N1, N2>::matrix_stack(std::initializer_list<numarray_stack<T, N1> > const& arg)
+    matrix_stack<T, N1, N2>::matrix_stack(std::initializer_list<numarray_stack<T, N2> > const& arg)
         :data()
     {
         

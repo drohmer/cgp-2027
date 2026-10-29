@@ -122,6 +122,8 @@ template <typename T> numarray<T>  operator-(numarray<T> const& a);
 template <typename T> numarray<T>& operator+=(numarray<T>& a, numarray<T> const& b);
 template <typename T> numarray<T>& operator+=(numarray<T>& a, T const& b);
 template <typename T> numarray<T>  operator+(numarray<T> const& a, numarray<T> const& b);
+template <typename T> numarray<T>  operator+(numarray<T> const& a, T const& b);
+template <typename T> numarray<T>  operator+(T const& a, numarray<T> const& b);
 
 template <typename T> numarray<T>& operator-=(numarray<T>& a, numarray<T> const& b);
 template <typename T> numarray<T>& operator-=(numarray<T>& a, T const& b);
@@ -414,7 +416,6 @@ template <typename T> T min(numarray<T> const& v)
 template <typename T>
 numarray<T>& operator+=(numarray<T>& a, numarray<T> const& b)
 {
-    assert_cgp(a.size()>0 && b.size()>0, "Size must be >0");
     assert_cgp(a.size()==b.size(), "Size do not agree");
 
     const int N = a.size();
@@ -474,7 +475,6 @@ template <typename T> numarray<T>  operator-(numarray<T> const& a)
 
 template <typename T> numarray<T>& operator-=(numarray<T>& a, numarray<T> const& b)
 {
-    assert_cgp(a.size()>0 && b.size()>0, "Size must be >0");
     assert_cgp(a.size()==b.size(), "Size do not agree");
 
     const int N = a.size();

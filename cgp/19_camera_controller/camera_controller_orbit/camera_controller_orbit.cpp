@@ -59,7 +59,7 @@ namespace cgp
 		doc += "   - Mouse right click + drag: Camera move close/far from its central focus point (the focus point remains unchanged).\n";
 		doc += "   - Ctrl + Mouse left click + drag: Translate/Pan the camera and its central focus point in the viewspace plane.\n";
 		doc += "   - Ctrl + Mouse right click + drag: Translate the camera and its central focus point in front/back direction.\n";
-		doc += "   - Key left/right: Twist/Roll the camera angle around the view direction.\n";
+		doc += "   - Key left/right (or R/F): Twist/Roll the camera angle around the view direction.\n";
 			
 		return doc;
 	}

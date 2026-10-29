@@ -107,12 +107,12 @@ namespace cgp
 	std::string camera_controller_first_person_euler::doc_usage() const
 	{
 		std::string doc;
-		doc += "First Person Euler - Camera that rotates around its own position using Euler angle (XYZ/rool-pitch-yaw Trait-Bryan convention).\n";
+		doc += "First Person Euler - Camera that rotates around its own position using Euler angle (XYZ/roll-pitch-yaw Tait-Bryan convention).\n";
 		doc += "Control: \n";
 		doc += "   - Mouse left click + drag: Rotate the camera in its local left/right and up/down direction.\n";
-		doc += "   - Mouse right click + drag: Translate the camera foward/backward.\n";
+		doc += "   - Mouse right click + drag: Translate the camera forward/backward.\n";
 		doc += "   - Key arrows or WASD/ZQSD for translating forward/backward/left/right.\n";
-		doc += "   - A(/Q)/E for twisting the camera left/right.\n";
+		doc += "   - Q/E (A/E on an AZERTY keyboard) for twisting the camera left/right.\n";
 		doc += "   - R/F for translating the camera up/down.\n";
 		doc += "   - Press \"Shift+C\" (Maj C)  to enter Mouse-Captured Mode: Enables infinite mouse tracking (quit the mode with \"Shift+C\" again or Esc).";
 

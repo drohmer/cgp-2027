@@ -56,17 +56,16 @@ namespace cgp {
 
 	void skybox_drawable::initialize_data_on_gpu()
 	{
-		shader.load_from_inline_text(skybox_vertex_shader, skybox_fragment_shader);
-		mesh const cube_mesh = mesh_primitive_cube({ 0,0,0 }, 2.0f);
-		
-		std::cout << "\n  [info] Skybox shader loaded [ID="<<shader.id<<"]\n" << std::endl;
-
-
-		// Check if this skybox_drawable is already initialized
+		// Check if this skybox_drawable is already initialized (before compiling a new shader)
 		if (vao != 0 || vbo_position.size != 0) {
 			std::cout << "Skybox already initialized" << std::endl;
 			abort();
 		}
+
+		shader.load_from_inline_text(skybox_vertex_shader, skybox_fragment_shader);
+		mesh const cube_mesh = mesh_primitive_cube({ 0,0,0 }, 2.0f);
+
+		std::cout << "\n  [info] Skybox shader loaded [ID="<<shader.id<<"]\n" << std::endl;
 
 		model = affine();
 		skybox_rotation = mat3::build_identity();

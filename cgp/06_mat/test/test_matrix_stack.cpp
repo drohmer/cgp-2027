@@ -509,5 +509,11 @@ namespace cgp_test
 		require_mat_specialization_api<mat2>();
 		require_mat_specialization_api<mat3>();
 		require_mat_specialization_api<mat4>();
+
+		// a non-square matrix is built from its N1 rows of size N2
+		{
+			matrix_stack<float,2,3> const M = { numarray_stack<float,3>{1,2,3}, numarray_stack<float,3>{4,5,6} };
+			assert_cgp_no_msg(M(0,2)==3 && M(1,0)==4 && M(1,2)==6);
+		}
 	}
 }

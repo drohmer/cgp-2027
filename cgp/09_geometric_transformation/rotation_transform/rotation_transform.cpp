@@ -16,6 +16,7 @@ namespace cgp
 		:data(q)
 	{
 		assert_cgp(cgp::abs(norm(q)-1.0f)<5e-2f, "Quaternion should have unit norm to represent rotation");
+		data = data / norm(data); // remove the drift of successive compositions
 	}
 
 	rotation_transform rotation_transform::from_quaternion(quaternion const& q)

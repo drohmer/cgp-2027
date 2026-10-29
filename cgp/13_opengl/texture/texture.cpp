@@ -90,8 +90,8 @@ namespace cgp
     void opengl_texture_image_structure::update_wrap(GLint wrap_s, GLint wrap_t) const
     {
         bind();
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s); opengl_check;
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t); opengl_check;
+        glTexParameteri(texture_type, GL_TEXTURE_WRAP_S, wrap_s); opengl_check;
+        glTexParameteri(texture_type, GL_TEXTURE_WRAP_T, wrap_t); opengl_check;
         unbind();
     }
 

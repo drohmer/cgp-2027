@@ -192,7 +192,7 @@ grid_3D<T> grid_3D<T>::from_array(numarray<T> const& arg, int size_1, int size_2
 template <typename T>
 void grid_3D<T>::clear()
 {
-    data.clear();
+    resize(0, 0, 0);
 }
 
 

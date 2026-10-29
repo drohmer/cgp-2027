@@ -16,6 +16,7 @@ namespace cgp
 		int width=0, height=0;
 		int screen_resolution_width=0, screen_resolution_height=0;
 		bool is_full_screen = false;
+		int windowed_width=0, windowed_height=0; // size restored by set_windowed_screen()
 
 		/** Initialize GLFW 
 		 * This function should be called at the beginning of the program before any OpenGL calls. */

@@ -32,7 +32,7 @@ namespace cgp
 
         /** Element access
          * Allows buffer[i], buffer(i), and buffer.at(i)
-         * Bound checking is performed unless cgp_NO_DEBUG is defined. */
+         * Bound checking is performed unless CGP_NO_DEBUG is defined. */
         T const& operator[](int index) const;
         T& operator[](int index);
 

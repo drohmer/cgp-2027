@@ -196,7 +196,7 @@ namespace cgp
 
 
         /** Element access
-         * Bound checking is performed unless cgp_NO_DEBUG is defined. */
+         * Bound checking is performed unless CGP_NO_DEBUG is defined. */
         vec4 const& operator[](int k2) const;
         vec4& operator[](int k2);
 

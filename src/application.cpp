@@ -171,6 +171,7 @@ void application_structure::animation_loop()
     ImGui::End();
     imgui_render_frame(s.window.glfw_window);
     glfwSwapBuffers(s.window.glfw_window);
+    s.inputs.mouse.scroll = 0; // scroll stores the events of the last frame only
     glfwPollEvents();
     if (glfwGetWindowAttrib(s.window.glfw_window, GLFW_ICONIFIED) != 0)
         ImGui_ImplGlfw_Sleep(10);
@@ -288,25 +289,35 @@ void application_structure::on_keyboard(int key, int scancode, int action, int m
     ImGui_ImplGlfw_KeyCallback(s.window.glfw_window, key, scancode, action, mods);
     bool imgui_capture_keyboard = ImGui::GetIO().WantCaptureKeyboard;
 
-    if (!imgui_capture_keyboard) {
-        s.inputs.keyboard.update_from_glfw_key(key, action);
-        s.keyboard_event();
+    if (imgui_capture_keyboard) {
+        // A key released while ImGui has the keyboard must not stay pressed for the scene
+        if (action == GLFW_RELEASE)
+            s.inputs.keyboard.update_from_glfw_key(key, action);
+        return;
+    }
 
-        if (key == GLFW_KEY_F && action == GLFW_PRESS && s.inputs.keyboard.shift) {
-            s.window.is_full_screen = !s.window.is_full_screen;
+    // Shift+F toggles the full screen. It is not passed to the scene and the camera
+    //  controllers, where F also moves or rolls some cameras.
+    if (key == GLFW_KEY_F && action != GLFW_RELEASE && s.inputs.keyboard.shift) {
+        if (action == GLFW_PRESS) {
             if (s.window.is_full_screen)
-                s.window.set_full_screen();
-            else
                 s.window.set_windowed_screen();
+            else
+                s.window.set_full_screen();
         }
-        if (key == GLFW_KEY_V && action == GLFW_PRESS && s.inputs.keyboard.shift) {
-            auto const camera_model = s.camera_control.camera_model;
-            std::cout << "\nDebug camera (position = " << str(camera_model.position()) << "):\n" << std::endl;
-            std::cout << "  Frame matrix:" << std::endl;
-            std::cout << str_pretty(camera_model.matrix_frame()) << std::endl;
-            std::cout << "  View matrix:" << std::endl;
-            std::cout << str_pretty(camera_model.matrix_view()) << std::endl;
-        }
+        return;
+    }
+
+    s.inputs.keyboard.update_from_glfw_key(key, action);
+    s.keyboard_event();
+
+    if (key == GLFW_KEY_V && action == GLFW_PRESS && s.inputs.keyboard.shift) {
+        auto const camera_model = s.camera_control.camera_model;
+        std::cout << "\nDebug camera (position = " << str(camera_model.position()) << "):\n" << std::endl;
+        std::cout << "  Frame matrix:" << std::endl;
+        std::cout << str_pretty(camera_model.matrix_frame()) << std::endl;
+        std::cout << "  View matrix:" << std::endl;
+        std::cout << str_pretty(camera_model.matrix_view()) << std::endl;
     }
 }
 

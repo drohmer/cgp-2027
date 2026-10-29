@@ -1,3 +1,5 @@
+#pragma once
+
 #include "cgp/16_drawable/curve_drawable/curve_drawable.hpp"
 
 namespace cgp

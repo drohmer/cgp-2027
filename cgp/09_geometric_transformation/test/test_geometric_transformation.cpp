@@ -125,5 +125,11 @@ namespace cgp_test
 			assert_cgp_no_msg(close((parent*child)*p, parent*(child*p)));
 			assert_cgp_no_msg(close((rigid*child)*p, rigid*(child*p)));
 		}
+
+		// rotation_transform normalizes a quaternion close to unit norm
+		{
+			rotation_transform const R(quaternion{ 0,0,0,1.02f });
+			assert_cgp_no_msg(std::abs(norm(R.data) - 1.0f) < 1e-6f);
+		}
 	}
 }

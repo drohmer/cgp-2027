@@ -106,6 +106,22 @@ namespace cgp_test
 			assert_cgp_no_msg(approx(t.t, 0.0f));  // t left unchanged
 		}
 
+		// ---------- timer_basic: the clock starts at the first update ----------
+		// The time spent between the construction and the first update (loading the
+		//  scene) is not counted.
+		{
+			g_now = 0.0;
+			timer_basic t;                   // no start()
+			g_now = 3.0;
+			float dt = t.update();
+			assert_cgp_no_msg(approx(dt, 0.0f));
+			assert_cgp_no_msg(approx(t.t, 0.0f));
+			g_now = 3.5;
+			dt = t.update();
+			assert_cgp_no_msg(approx(dt, 0.5f));
+			assert_cgp_no_msg(approx(t.t, 0.5f));
+		}
+
 		timer_set_time_source(nullptr);      // restore the real monotonic clock
 	}
 }

@@ -143,6 +143,13 @@ namespace cgp_test {
 			cgp::grid_3D<int> r = 10 - a;
 			assert_cgp_no_msg(r(0,0,0)==7 && r(1,1,1)==7);
 		}
+
+		// clear() empties a grid_3D: the dimension is reset with the data
+		{
+			cgp::grid_3D<int> a(2,3,4);
+			a.clear();
+			assert_cgp_no_msg(a.size()==0 && a.dimension.x==0 && a.data.size()==0);
+		}
 	}
 
 }

@@ -8,12 +8,12 @@ namespace cgp
 	static void warning_initialize_non_empty()
 	{
 		std::string warning = "\n";
-		warning += "  > You are calling initialize_gpu_data on an non-empty curve_drawable \n";
+		warning += "  > You are calling initialize_data_on_gpu on a non-empty curve_drawable \n";
 		warning += "In normal condition, you should avoid initializing curve_drawable on an existing one without clearing it - the previously allocated memory on the GPU is going to be lost.\n";
 		warning += " - If you want to clear the memory, please call curve_drawable.clear() before calling a new initialization\n";
 		warning += " - Note that you should generally not call initialize_data_on_gpu() in the animation loop\n";
 
-		warning_cgp("Calling initialize_data_on_gpu() on a mesh_drawable with non zero VBOs", warning);
+		warning_cgp("Calling initialize_data_on_gpu() on a curve_drawable with non zero VBOs", warning);
 	}
 
 	void curve_drawable::initialize_data_on_gpu(numarray<vec3> const& position, opengl_shader_structure const& shader_arg)

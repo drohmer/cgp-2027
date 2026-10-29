@@ -17,6 +17,7 @@ namespace cgp
 	protected:
 		bool running;
 		double time_previous;
+		bool started; // false until the first update() or start()
 	};
 
 	// Time source (in seconds) shared by all timers. Defaults to a steady

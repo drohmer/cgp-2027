@@ -99,7 +99,7 @@ namespace cgp
      * Each face of the cube is made by two triangles. */
     mesh mesh_primitive_cube(vec3 const& center={0,0,0}, float edge_length=1.0f);
 
-    /** Build a tetrahedron described by its three corners.*/
+    /** Build a tetrahedron described by its four corners.*/
     mesh mesh_primitive_tetrahedron(vec3 const& p0={0,0,0}, vec3 const& p1={1,0,0}, vec3 const& p2={0,1,0}, vec3 const& p3={0,0,1});
 
 
@@ -118,12 +118,12 @@ namespace cgp
      * <-------------->
      *      radius 
      * 
-     * - radius: the radius at the base of the cylinder
-     * - height: the height of the cylinder along 
+     * - radius: the radius at the base of the cone
+     * - height: the height of the cone along axis_direction
      * - center_of_base: position at the center of the base disc
      * - axis_direction: direction of the central axis
      * - is_closed_base: fill the base with a disc if true
-     * - Nu, Nv: samples along the height and radial direction
+     * - Nu: samples around the axis, Nv: samples along the height
      * 
     */
     mesh mesh_primitive_cone(float radius=0.5f, float height=1.0f, vec3 const& center_of_base={0,0,0}, vec3 const& axis_direction={0,0,1}, bool is_closed_base=true, int Nu=20, int Nv=10);
@@ -131,7 +131,7 @@ namespace cgp
     /** Mesh representing an arrow: {cylinder+cone} pointing from point p0 to point p1
      *       /\     ^
      *      /  \    | 
-     *     /    \   | cone_height_scale = ||p1-p0|| * cone_length_scale
+     *     /    \   | cone length = cylinder_radius * cone_height_scale
      *    /      \  |
      *   /        \ |
      *  /____p1____\v  
@@ -147,7 +147,6 @@ namespace cgp
      * cone_height_scale: length of cone extremity expressed as the scale of the cylinder radius
      * cone_radius_scale: radius of the cone extremity expressed as the scale of the cylinder_radius
      * N: number of samples (cylinder and cone)
-     * double_sided: create an arrow also at the base point
     */
     mesh mesh_primitive_arrow(vec3 const& p0={0,0,0}, vec3 const& p1={1,0,0}, float cylinder_radius=0.05f, float cone_height_scale=4.0f, float cone_radius_scale=2.5f, int N=18);
 

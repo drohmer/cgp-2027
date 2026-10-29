@@ -138,5 +138,35 @@ namespace cgp_test
 			for (int k = 0; k < m.normal.size(); ++k)
 				assert_cgp_no_msg(is_equal(m.normal[k], vec3{ 0,0,1 }));
 		}
+
+		// ---------- apply_transform with a negative scaling flips normals and winding ----------
+		// affine_rts with scaling -1 is a point inversion, as scale(-1); an affine with
+		//  scaling_xyz={-1,1,1} is a reflection, as scale(-1,1,1).
+		{
+			mesh m;
+			m.position = { {0,0,0}, {1,0,0}, {0,1,0} };
+			m.normal = { {0,0,1}, {0,0,1}, {0,0,1} };
+			m.connectivity = { {0,1,2} };
+
+			m.apply_transform(affine_rts(rotation_transform(), vec3{ 0,0,0 }, -1.0f));
+
+			for (int k = 0; k < m.normal.size(); ++k)
+				assert_cgp_no_msg(is_equal(m.normal[k], vec3{ 0,0,-1 }));
+			uint3 const& c = m.connectivity[0];
+			assert_cgp_no_msg(c[0] == 1u && c[1] == 0u && c[2] == 2u);
+		}
+		{
+			mesh m;
+			m.position = { {0,0,0}, {1,0,0}, {0,1,0} };
+			m.normal = { {0,0,1}, {0,0,1}, {0,0,1} };
+			m.connectivity = { {0,1,2} };
+
+			m.apply_transform(affine(rotation_transform(), vec3{ 0,0,0 }, 1.0f, vec3{ -1,1,1 }));
+
+			for (int k = 0; k < m.normal.size(); ++k)
+				assert_cgp_no_msg(is_equal(m.normal[k], vec3{ 0,0,1 }));
+			uint3 const& c = m.connectivity[0];
+			assert_cgp_no_msg(c[0] == 1u && c[1] == 0u && c[2] == 2u);
+		}
 	}
 }
