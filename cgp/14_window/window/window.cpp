@@ -133,12 +133,27 @@ namespace cgp
     }
 
 
+    // Video mode of the primary monitor. Stops with an explicit message when there is no
+    //  monitor (no access to a display, e.g. over SSH) instead of dereferencing a null pointer.
+    static GLFWvidmode const* primary_video_mode()
+    {
+        GLFWmonitor* const primary = glfwGetPrimaryMonitor();
+        GLFWvidmode const* const mode = (primary != nullptr) ? glfwGetVideoMode(primary) : nullptr;
+        if (mode == nullptr) {
+            std::string s = "\nError: No monitor found (glfwGetPrimaryMonitor).\n";
+            s += "The program needs access to a display: run it from a graphical session (not over SSH without display forwarding).\n";
+            std::cout << s << std::endl;
+            abort();
+        }
+        return mode;
+    }
+
     void window_structure::create_window(int width_arg, int height_arg, std::string const& window_title, int opengl_version_major, int opengl_version_minor)
     {
         glfw_window = glfw_create_window(width_arg, height_arg, window_title, opengl_version_major, opengl_version_minor);
 
         monitor = glfwGetPrimaryMonitor();
-        const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+        const GLFWvidmode* mode = primary_video_mode();
         screen_resolution_width = mode->width;
         screen_resolution_height = mode->height;
 
@@ -199,10 +214,10 @@ namespace cgp
     }
 
     int window_structure::monitor_width() const {
-        return glfwGetVideoMode(glfwGetPrimaryMonitor())->width;
+        return primary_video_mode()->width;
     }
     int window_structure::monitor_height() const {
-        return glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
+        return primary_video_mode()->height;
     }
 
 }
